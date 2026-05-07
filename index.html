@@ -3,10 +3,188 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="stylesheet.css">
     <title>B3N Industries</title>
 </head>
 <body>
-    <p>Hello world</p>
+
+    <nav class="navbar">
+        <div class="nav_spacer"></div>
+
+        <div class="logo_container">
+            <a href="index.html"><img class="logo_img" src="images/b3nlogo.png" alt="B3N Industries Logo"></a>
+        </div>
+
+        <div class="nav_links">
+            <a href="aboutus.html">About Us</a>
+            <!-- <a href="">Services</a> -->
+            <a href="contact.html">Contact</a>
+        </div>
+    </nav>
+
+    <div class="content">
+        <div class="main_content">
+            <span class="eyebrow">B3N Industries</span>
+            <h1>Engineered for<br>the <span class="accent">Future</span></h1>
+            <div class="tag_row">
+                <span class="tag">3D Printed</span>
+                <span class="tag amber">Leather Inlay</span>
+            </div>
+            <p>Precision-engineered from the ground up. A flush-fit leatherette panel, recessed into a 3D-printed body — built to last, designed to impress.</p>
+            <div class="cta_row">
+                <!-- <a href="#" class="btn_primary">Shop Now</a> -->
+                <a href="#" class="btn_ghost">Learn More</a>
+            </div>
+        </div>
+
+        <!-- Ai generated wallet img -->
+        <div class="right_content">
+            <div class="wallet_glow"></div>
+            <svg class="wallet_svg" viewBox="0 0 320 420" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="bodyGrad" x1="0" y1="0" x2="1" y2="1">
+                        <stop offset="0%" stop-color="#2a2a2a"/>
+                        <stop offset="100%" stop-color="#111111"/>
+                    </linearGradient>
+                    <linearGradient id="leatherGrad" x1="0" y1="0" x2="1" y2="1">
+                        <stop offset="0%" stop-color="#8B5E2E"/>
+                        <stop offset="50%" stop-color="#6B4420"/>
+                        <stop offset="100%" stop-color="#4a2e10"/>
+                    </linearGradient>
+                    <linearGradient id="edgeGrad" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="#444"/>
+                        <stop offset="100%" stop-color="#1a1a1a"/>
+                    </linearGradient>
+                    <clipPath id="bodyClip">
+                        <rect x="30" y="60" width="240" height="300" rx="18"/>
+                    </clipPath>
+                </defs>
+
+                <!-- 3D side depth -->
+                <rect x="255" y="74" width="18" height="274" rx="6" fill="url(#edgeGrad)" opacity="0.9"/>
+                <rect x="38" y="346" width="226" height="16" rx="6" fill="url(#edgeGrad)" opacity="0.7"/>
+
+                <!-- Main body -->
+                <rect x="30" y="60" width="240" height="300" rx="18" fill="url(#bodyGrad)"/>
+
+                <!-- Carbon fiber texture -->
+                <g clip-path="url(#bodyClip)" opacity="0.06">
+                    <line x1="30" y1="60" x2="270" y2="360" stroke="#fff" stroke-width="14"/>
+                    <line x1="0"  y1="60" x2="240" y2="360" stroke="#fff" stroke-width="14"/>
+                    <line x1="60" y1="60" x2="300" y2="360" stroke="#fff" stroke-width="14"/>
+                    <line x1="30" y1="90" x2="270" y2="390" stroke="#fff" stroke-width="14"/>
+                    <line x1="30" y1="120" x2="270" y2="420" stroke="#fff" stroke-width="14"/>
+                </g>
+
+                <!-- Corner screws -->
+                <circle cx="55"  cy="85"  r="5" fill="#1a1a1a" stroke="#555" stroke-width="1"/>
+                <circle cx="55"  cy="85"  r="2" fill="#333"/>
+                <circle cx="245" cy="85"  r="5" fill="#1a1a1a" stroke="#555" stroke-width="1"/>
+                <circle cx="245" cy="85"  r="2" fill="#333"/>
+                <circle cx="55"  cy="335" r="5" fill="#1a1a1a" stroke="#555" stroke-width="1"/>
+                <circle cx="55"  cy="335" r="2" fill="#333"/>
+                <circle cx="245" cy="335" r="5" fill="#1a1a1a" stroke="#555" stroke-width="1"/>
+                <circle cx="245" cy="335" r="2" fill="#333"/>
+
+                <!-- Leather recess -->
+                <rect x="62" y="96" width="176" height="228" rx="10" fill="#1a1a1a"/>
+                <rect x="66" y="100" width="168" height="220" rx="8" fill="url(#leatherGrad)"/>
+
+                <!-- Leather texture -->
+                <g opacity="0.14" stroke="#2a1500" stroke-width="1" fill="none">
+                    <path d="M80 125 Q120 119 160 126 Q200 132 220 124"/>
+                    <path d="M76 150 Q112 143 152 149 Q192 155 224 147"/>
+                    <path d="M78 175 Q115 169 155 175 Q195 181 222 173"/>
+                    <path d="M80 200 Q118 194 158 200 Q198 206 220 198"/>
+                    <path d="M82 225 Q120 219 160 225 Q200 231 220 223"/>
+                    <path d="M80 252 Q118 246 158 252 Q198 258 220 250"/>
+                    <path d="M82 278 Q120 272 160 278 Q200 284 220 276"/>
+                    <path d="M80 303 Q118 297 158 303 Q198 309 218 301"/>
+                </g>
+
+                <!-- Stitching top -->
+                <g stroke="#c9873a" stroke-width="1.5" stroke-linecap="round" opacity="0.9">
+                    <line x1="72"  y1="107" x2="78"  y2="107"/>
+                    <line x1="84"  y1="107" x2="90"  y2="107"/>
+                    <line x1="96"  y1="107" x2="102" y2="107"/>
+                    <line x1="108" y1="107" x2="114" y2="107"/>
+                    <line x1="120" y1="107" x2="126" y2="107"/>
+                    <line x1="132" y1="107" x2="138" y2="107"/>
+                    <line x1="144" y1="107" x2="150" y2="107"/>
+                    <line x1="156" y1="107" x2="162" y2="107"/>
+                    <line x1="168" y1="107" x2="174" y2="107"/>
+                    <line x1="180" y1="107" x2="186" y2="107"/>
+                    <line x1="192" y1="107" x2="198" y2="107"/>
+                    <line x1="204" y1="107" x2="210" y2="107"/>
+                    <line x1="216" y1="107" x2="222" y2="107"/>
+                    <line x1="228" y1="107" x2="232" y2="107"/>
+                </g>
+                <!-- Stitching bottom -->
+                <g stroke="#c9873a" stroke-width="1.5" stroke-linecap="round" opacity="0.9">
+                    <line x1="72"  y1="312" x2="78"  y2="312"/>
+                    <line x1="84"  y1="312" x2="90"  y2="312"/>
+                    <line x1="96"  y1="312" x2="102" y2="312"/>
+                    <line x1="108" y1="312" x2="114" y2="312"/>
+                    <line x1="120" y1="312" x2="126" y2="312"/>
+                    <line x1="132" y1="312" x2="138" y2="312"/>
+                    <line x1="144" y1="312" x2="150" y2="312"/>
+                    <line x1="156" y1="312" x2="162" y2="312"/>
+                    <line x1="168" y1="312" x2="174" y2="312"/>
+                    <line x1="180" y1="312" x2="186" y2="312"/>
+                    <line x1="192" y1="312" x2="198" y2="312"/>
+                    <line x1="204" y1="312" x2="210" y2="312"/>
+                    <line x1="216" y1="312" x2="222" y2="312"/>
+                    <line x1="228" y1="312" x2="232" y2="312"/>
+                </g>
+                <!-- Stitching left -->
+                <g stroke="#c9873a" stroke-width="1.5" stroke-linecap="round" opacity="0.9">
+                    <line x1="72" y1="113" x2="72" y2="119"/><line x1="72" y1="125" x2="72" y2="131"/>
+                    <line x1="72" y1="137" x2="72" y2="143"/><line x1="72" y1="149" x2="72" y2="155"/>
+                    <line x1="72" y1="161" x2="72" y2="167"/><line x1="72" y1="173" x2="72" y2="179"/>
+                    <line x1="72" y1="185" x2="72" y2="191"/><line x1="72" y1="197" x2="72" y2="203"/>
+                    <line x1="72" y1="209" x2="72" y2="215"/><line x1="72" y1="221" x2="72" y2="227"/>
+                    <line x1="72" y1="233" x2="72" y2="239"/><line x1="72" y1="245" x2="72" y2="251"/>
+                    <line x1="72" y1="257" x2="72" y2="263"/><line x1="72" y1="269" x2="72" y2="275"/>
+                    <line x1="72" y1="281" x2="72" y2="287"/><line x1="72" y1="293" x2="72" y2="299"/>
+                </g>
+                <!-- Stitching right -->
+                <g stroke="#c9873a" stroke-width="1.5" stroke-linecap="round" opacity="0.9">
+                    <line x1="230" y1="113" x2="230" y2="119"/><line x1="230" y1="125" x2="230" y2="131"/>
+                    <line x1="230" y1="137" x2="230" y2="143"/><line x1="230" y1="149" x2="230" y2="155"/>
+                    <line x1="230" y1="161" x2="230" y2="167"/><line x1="230" y1="173" x2="230" y2="179"/>
+                    <line x1="230" y1="185" x2="230" y2="191"/><line x1="230" y1="197" x2="230" y2="203"/>
+                    <line x1="230" y1="209" x2="230" y2="215"/><line x1="230" y1="221" x2="230" y2="227"/>
+                    <line x1="230" y1="233" x2="230" y2="239"/><line x1="230" y1="245" x2="230" y2="251"/>
+                    <line x1="230" y1="257" x2="230" y2="263"/><line x1="230" y1="269" x2="230" y2="275"/>
+                    <line x1="230" y1="281" x2="230" y2="287"/><line x1="230" y1="293" x2="230" y2="299"/>
+                </g>
+
+                <!-- Card slot -->
+                <rect x="95" y="295" width="110" height="40" rx="8" fill="#0f0f0f" opacity="0.9"/>
+                <rect x="97" y="297" width="106" height="9" rx="3" fill="#0a0a0a"/>
+
+                <!-- FOCUS brand engraved -->
+                <text x="150" y="218" text-anchor="middle"
+                      font-family="'Bebas Neue', sans-serif"
+                      font-size="40" fill="#3a2208"
+                      letter-spacing="7" opacity="0.55">FOCUS</text>
+                <text x="150" y="237" text-anchor="middle"
+                      font-family="'Rajdhani', sans-serif"
+                      font-size="11" fill="#3a2208"
+                      letter-spacing="3" opacity="0.45">B3N INDUSTRIES</text>
+
+                <!-- Sheen highlight -->
+                <rect x="66" y="100" width="168" height="55" rx="8" fill="white" opacity="0.04"/>
+
+                <!-- Top metallic strip -->
+                <rect x="38" y="58" width="226" height="5" rx="2" fill="#3a3a3a" opacity="0.8"/>
+            </svg>
+        </div>
+    </div>
+    <footer>
+        <p>&copy; 2026 B3N Industries. All rights reserved.</p>
+    </footer>
+
 </body>
 </html>
