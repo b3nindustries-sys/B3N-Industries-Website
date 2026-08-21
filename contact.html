@@ -3,28 +3,79 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <meta name="description" content="Contact B3N Industries — technical questions, release notice for the prototype, and studio enquiries.">
+    <meta name="theme-color" content="#0b0c0e">
+    <link rel="icon" href="images/brand/b3n-mark-bone.svg" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,400..900&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="stylesheet.css">
-    <title>B3N Industries</title>
+    <script src="script.js" defer></script>
+    <script>try{if(localStorage.getItem('b3n-theme')==='blue'){document.documentElement.setAttribute('data-theme','blue');}}catch(e){}</script>
+    <title>Contact — B3N Industries</title>
 </head>
-<body>
+<body class="sheet">
 
-    <nav class="navbar">
-        <div class="nav_spacer"></div>
+<div class="backdrop" aria-hidden="true"></div>
+<div class="grain" aria-hidden="true"></div>
 
-        <div class="logo_container">
-            <a href="index.html"><img class="logo_img" src="images/b3nlogo.png" alt="B3N Industries Logo"></a>
+
+<nav class="nav">
+    <a class="nav__mark" href="index.html" aria-label="B3N Industries — home">
+        <img src="images/brand/b3n-mark-bone.svg" alt="B3N Industries">
+        <span class="sig">Engineering<br>For The Future</span>
+    </a>
+    <div class="nav__links">
+        <a href="index.html"><i>01</i>Index</a>
+        <a href="contact.html" aria-current="page"><i>02</i>Contact</a>
+        <button class="theme-toggle" type="button" data-theme-toggle aria-pressed="false" title="Switch the site palette">
+            <span class="theme-toggle__dot" aria-hidden="true"></span>
+            <span class="t-blue">Blue</span><span class="t-signal">Signal</span>
+        </button>
+    </div>
+</nav>
+
+<main class="sheet__main">
+    <div class="sheet__lead">
+        <span class="idx rise d1">05 / Contact sheet</span>
+        <h1 class="rise d2">Write to<br><span class="ghost">the bench.</span></h1>
+        <p class="rise d3">
+            No forms, no funnel, no tracking. Every line here opens your own mail client and lands
+            with the person who drew the thing.
+        </p>
+        <a class="sheet__mail rise d4" href="mailto:hello@b3nindustries.com">hello@b3nindustries.com</a>
+        <p class="sheet__note rise d5">Quote the document you are reading &mdash; TCD-001, rev. Aug 2026 &mdash; and you save a round trip.</p>
+    </div>
+
+    <div class="cards sheet__cards rise d4">
+        <a class="card" href="mailto:hello@b3nindustries.com?subject=Register%20interest%20%E2%80%94%20the%20prototype">
+            <span class="k">01 / Release notice</span>
+            <span class="v">Register interest</span>
+            <span class="d">One message when the prototype clears quality control. Nothing before it, nothing after.</span>
+        </a>
+        <a class="card" href="mailto:hello@b3nindustries.com?subject=Technical%20question%20%E2%80%94%20TCD-001">
+            <span class="k">02 / Technical</span>
+            <span class="v">Ask about the build</span>
+            <span class="d">Materials, tolerances, print profile, finishing. If it is in the document, you can have it.</span>
+        </a>
+        <a class="card" href="mailto:hello@b3nindustries.com?subject=Studio%20enquiry">
+            <span class="k">03 / Studio</span>
+            <span class="v">General enquiry</span>
+            <span class="d">Collaboration, small-batch work, or anything that does not fit the two above.</span>
+        </a>
+        <div class="card">
+            <span class="k">04 / Where we are</span>
+            <span class="v">One bench, remote</span>
+            <span class="d">A single workshop and a mail client. Typical reply within two working days.</span>
         </div>
+    </div>
+</main>
 
-        <div class="nav_links">
-            <a href="aboutus.html">About Us</a>
-            <!-- <a href="">Services</a> -->
-            <a href="contact.html">Contact</a>
-        </div>
-    </nav>
+<div class="foot__base">
+    <span>&copy; 2026 B3N Industries</span>
+    <span>TCD-003 &mdash; REV. AUG 2026</span>
+    <span>Engineering For The Future</span>
+</div>
 
-    <div class="content"></div>
 </body>
-<footer>
-    <p>&copy; 2026 B3N Industries. All rights reserved.</p>
-</footer>
+</html>
