@@ -3,189 +3,214 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <meta name="description" content="B3N Industries — engineering for the future. Precision 3D-printed carry, with a flush-fit leatherette panel recessed into the shell.">
+    <meta name="theme-color" content="#0b0c0e">
+    <link rel="icon" href="images/brand/b3n-mark-bone.svg" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,400..900&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="stylesheet.css">
-    <script src="//instant.page/5.2.0" type="module" integrity="sha384-N8SbuKvxo15n6gr6pGWW74VzU80K5uGf6S+82Ab7A6PXiX1Hl8ZqhXn1f1WcOnY4"></script>
-    <title>B3N Industries</title>
+    <script src="script.js" defer></script>
+    <script>try{if(localStorage.getItem('b3n-theme')==='blue'){document.documentElement.setAttribute('data-theme','blue');}}catch(e){}</script>
+    <title>B3N Industries — Engineering For The Future</title>
 </head>
 <body>
 
-    <nav class="navbar">
-        <div class="nav_spacer"></div>
+<div class="backdrop" aria-hidden="true"></div>
+<div class="grain" aria-hidden="true"></div>
 
-        <div class="logo_container">
-            <a href="index.html"><img class="logo_img" src="images/b3nlogo.png" alt="B3N Industries Logo"></a>
-        </div>
+<aside class="rail" aria-hidden="true">
+    <span>TCD-001</span>
+    <div class="tick"></div>
+    <span>REV. AUG 2026</span>
+</aside>
 
-        <div class="nav_links">
-            <a href="aboutus.html">About Us</a> 
-            <a href="">Services</a>
-            <a href="contact.html">Contact</a>
-        </div>
-    </nav>
 
-    <div class="content">
-        <div class="main_content">
-            <span class="eyebrow">B3N Industries</span>
-            <h1>Engineered for<br>the <span class="accent">Future</span></h1>
-            <div class="tag_row">
-                <span class="tag">3D Printed</span>
-                <span class="tag amber">Leather Inlay</span>
-            </div>
-            <p>Precision-engineered from the ground up. A flush-fit leatherette panel, recessed into a 3D-printed body — built to last, designed to impress.</p>
-            <div class="cta_row">
-                <!-- <a href="#" class="btn_primary">Shop Now</a> -->
-                <a href="#" class="btn_ghost">Learn More</a>
-            </div>
-        </div>
+<!-- ===================== NAVIGATION ===================== -->
+<nav class="nav">
+    <a class="nav__mark" href="index.html" aria-label="B3N Industries — home">
+        <img src="images/brand/b3n-mark-bone.svg" alt="B3N Industries">
+        <span class="sig">Engineering<br>For The Future</span>
+    </a>
+    <div class="nav__links">
+        <a href="index.html" aria-current="page"><i>01</i>Index</a>
+        <a href="contact.html"><i>02</i>Contact</a>
+        <button class="theme-toggle" type="button" data-theme-toggle aria-pressed="false" title="Switch the site palette">
+            <span class="theme-toggle__dot" aria-hidden="true"></span>
+            <span class="t-blue">Blue</span><span class="t-signal">Orange</span>
+        </button>
+    </div>
+</nav>
 
-        <!-- Ai generated wallet img -->
-        <div class="right_content">
-            <div class="wallet_glow"></div>
-            <svg class="wallet_svg" viewBox="0 0 320 420" xmlns="http://www.w3.org/2000/svg">
-                <defs>
-                    <linearGradient id="bodyGrad" x1="0" y1="0" x2="1" y2="1">
-                        <stop offset="0%" stop-color="#2a2a2a"/>
-                        <stop offset="100%" stop-color="#111111"/>
-                    </linearGradient>
-                    <linearGradient id="leatherGrad" x1="0" y1="0" x2="1" y2="1">
-                        <stop offset="0%" stop-color="#8B5E2E"/>
-                        <stop offset="50%" stop-color="#6B4420"/>
-                        <stop offset="100%" stop-color="#4a2e10"/>
-                    </linearGradient>
-                    <linearGradient id="edgeGrad" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stop-color="#444"/>
-                        <stop offset="100%" stop-color="#1a1a1a"/>
-                    </linearGradient>
-                    <clipPath id="bodyClip">
-                        <rect x="30" y="60" width="240" height="300" rx="18"/>
-                    </clipPath>
-                </defs>
+<!-- ===================== HERO ===================== -->
+<header class="hero">
+    <div>
+        <div class="hero__stamp rise d1"><b></b> The prototype &mdash; in development</div>
 
-                <!-- 3D side depth -->
-                <rect x="255" y="74" width="18" height="274" rx="6" fill="url(#edgeGrad)" opacity="0.9"/>
-                <rect x="38" y="346" width="226" height="16" rx="6" fill="url(#edgeGrad)" opacity="0.7"/>
+        <h1 class="rise d2">
+            Engineered<br>
+            <span class="ghost">for the</span><br>
+            Future
+        </h1>
 
-                <!-- Main body -->
-                <rect x="30" y="60" width="240" height="300" rx="18" fill="url(#bodyGrad)"/>
+        <p class="hero__lede rise d3">
+            A carry object built the way hardware should be: <strong>a 3D-printed monocoque shell</strong>
+            with a leatherette panel recessed flush into its face. No glue seams on show, no wasted
+            millimetres &mdash; every tolerance is drawn before it is printed.
+        </p>
 
-                <!-- Carbon fiber texture -->
-                <g clip-path="url(#bodyClip)" opacity="0.06">
-                    <line x1="30" y1="60" x2="270" y2="360" stroke="#fff" stroke-width="14"/>
-                    <line x1="0"  y1="60" x2="240" y2="360" stroke="#fff" stroke-width="14"/>
-                    <line x1="60" y1="60" x2="300" y2="360" stroke="#fff" stroke-width="14"/>
-                    <line x1="30" y1="90" x2="270" y2="390" stroke="#fff" stroke-width="14"/>
-                    <line x1="30" y1="120" x2="270" y2="420" stroke="#fff" stroke-width="14"/>
-                </g>
-
-                <!-- Corner screws -->
-                <circle cx="55"  cy="85"  r="5" fill="#1a1a1a" stroke="#555" stroke-width="1"/>
-                <circle cx="55"  cy="85"  r="2" fill="#333"/>
-                <circle cx="245" cy="85"  r="5" fill="#1a1a1a" stroke="#555" stroke-width="1"/>
-                <circle cx="245" cy="85"  r="2" fill="#333"/>
-                <circle cx="55"  cy="335" r="5" fill="#1a1a1a" stroke="#555" stroke-width="1"/>
-                <circle cx="55"  cy="335" r="2" fill="#333"/>
-                <circle cx="245" cy="335" r="5" fill="#1a1a1a" stroke="#555" stroke-width="1"/>
-                <circle cx="245" cy="335" r="2" fill="#333"/>
-
-                <!-- Leather recess -->
-                <rect x="62" y="96" width="176" height="228" rx="10" fill="#1a1a1a"/>
-                <rect x="66" y="100" width="168" height="220" rx="8" fill="url(#leatherGrad)"/>
-
-                <!-- Leather texture -->
-                <g opacity="0.14" stroke="#2a1500" stroke-width="1" fill="none">
-                    <path d="M80 125 Q120 119 160 126 Q200 132 220 124"/>
-                    <path d="M76 150 Q112 143 152 149 Q192 155 224 147"/>
-                    <path d="M78 175 Q115 169 155 175 Q195 181 222 173"/>
-                    <path d="M80 200 Q118 194 158 200 Q198 206 220 198"/>
-                    <path d="M82 225 Q120 219 160 225 Q200 231 220 223"/>
-                    <path d="M80 252 Q118 246 158 252 Q198 258 220 250"/>
-                    <path d="M82 278 Q120 272 160 278 Q200 284 220 276"/>
-                    <path d="M80 303 Q118 297 158 303 Q198 309 218 301"/>
-                </g>
-
-                <!-- Stitching top -->
-                <g stroke="#c9873a" stroke-width="1.5" stroke-linecap="round" opacity="0.9">
-                    <line x1="72"  y1="107" x2="78"  y2="107"/>
-                    <line x1="84"  y1="107" x2="90"  y2="107"/>
-                    <line x1="96"  y1="107" x2="102" y2="107"/>
-                    <line x1="108" y1="107" x2="114" y2="107"/>
-                    <line x1="120" y1="107" x2="126" y2="107"/>
-                    <line x1="132" y1="107" x2="138" y2="107"/>
-                    <line x1="144" y1="107" x2="150" y2="107"/>
-                    <line x1="156" y1="107" x2="162" y2="107"/>
-                    <line x1="168" y1="107" x2="174" y2="107"/>
-                    <line x1="180" y1="107" x2="186" y2="107"/>
-                    <line x1="192" y1="107" x2="198" y2="107"/>
-                    <line x1="204" y1="107" x2="210" y2="107"/>
-                    <line x1="216" y1="107" x2="222" y2="107"/>
-                    <line x1="228" y1="107" x2="232" y2="107"/>
-                </g>
-                <!-- Stitching bottom -->
-                <g stroke="#c9873a" stroke-width="1.5" stroke-linecap="round" opacity="0.9">
-                    <line x1="72"  y1="312" x2="78"  y2="312"/>
-                    <line x1="84"  y1="312" x2="90"  y2="312"/>
-                    <line x1="96"  y1="312" x2="102" y2="312"/>
-                    <line x1="108" y1="312" x2="114" y2="312"/>
-                    <line x1="120" y1="312" x2="126" y2="312"/>
-                    <line x1="132" y1="312" x2="138" y2="312"/>
-                    <line x1="144" y1="312" x2="150" y2="312"/>
-                    <line x1="156" y1="312" x2="162" y2="312"/>
-                    <line x1="168" y1="312" x2="174" y2="312"/>
-                    <line x1="180" y1="312" x2="186" y2="312"/>
-                    <line x1="192" y1="312" x2="198" y2="312"/>
-                    <line x1="204" y1="312" x2="210" y2="312"/>
-                    <line x1="216" y1="312" x2="222" y2="312"/>
-                    <line x1="228" y1="312" x2="232" y2="312"/>
-                </g>
-                <!-- Stitching left -->
-                <g stroke="#c9873a" stroke-width="1.5" stroke-linecap="round" opacity="0.9">
-                    <line x1="72" y1="113" x2="72" y2="119"/><line x1="72" y1="125" x2="72" y2="131"/>
-                    <line x1="72" y1="137" x2="72" y2="143"/><line x1="72" y1="149" x2="72" y2="155"/>
-                    <line x1="72" y1="161" x2="72" y2="167"/><line x1="72" y1="173" x2="72" y2="179"/>
-                    <line x1="72" y1="185" x2="72" y2="191"/><line x1="72" y1="197" x2="72" y2="203"/>
-                    <line x1="72" y1="209" x2="72" y2="215"/><line x1="72" y1="221" x2="72" y2="227"/>
-                    <line x1="72" y1="233" x2="72" y2="239"/><line x1="72" y1="245" x2="72" y2="251"/>
-                    <line x1="72" y1="257" x2="72" y2="263"/><line x1="72" y1="269" x2="72" y2="275"/>
-                    <line x1="72" y1="281" x2="72" y2="287"/><line x1="72" y1="293" x2="72" y2="299"/>
-                </g>
-                <!-- Stitching right -->
-                <g stroke="#c9873a" stroke-width="1.5" stroke-linecap="round" opacity="0.9">
-                    <line x1="230" y1="113" x2="230" y2="119"/><line x1="230" y1="125" x2="230" y2="131"/>
-                    <line x1="230" y1="137" x2="230" y2="143"/><line x1="230" y1="149" x2="230" y2="155"/>
-                    <line x1="230" y1="161" x2="230" y2="167"/><line x1="230" y1="173" x2="230" y2="179"/>
-                    <line x1="230" y1="185" x2="230" y2="191"/><line x1="230" y1="197" x2="230" y2="203"/>
-                    <line x1="230" y1="209" x2="230" y2="215"/><line x1="230" y1="221" x2="230" y2="227"/>
-                    <line x1="230" y1="233" x2="230" y2="239"/><line x1="230" y1="245" x2="230" y2="251"/>
-                    <line x1="230" y1="257" x2="230" y2="263"/><line x1="230" y1="269" x2="230" y2="275"/>
-                    <line x1="230" y1="281" x2="230" y2="287"/><line x1="230" y1="293" x2="230" y2="299"/>
-                </g>
-
-                <!-- Card slot -->
-                <rect x="95" y="295" width="110" height="40" rx="8" fill="#0f0f0f" opacity="0.9"/>
-                <rect x="97" y="297" width="106" height="9" rx="3" fill="#0a0a0a"/>
-
-                <!-- FOCUS brand engraved -->
-                <text x="150" y="218" text-anchor="middle"
-                      font-family="'Bebas Neue', sans-serif"
-                      font-size="40" fill="#3a2208"
-                      letter-spacing="7" opacity="0.55">FOCUS</text>
-                <text x="150" y="237" text-anchor="middle"
-                      font-family="'Rajdhani', sans-serif"
-                      font-size="11" fill="#3a2208"
-                      letter-spacing="3" opacity="0.45">B3N INDUSTRIES</text>
-
-                <!-- Sheen highlight -->
-                <rect x="66" y="100" width="168" height="55" rx="8" fill="white" opacity="0.04"/>
-
-                <!-- Top metallic strip -->
-                <rect x="38" y="58" width="226" height="5" rx="2" fill="#3a3a3a" opacity="0.8"/>
-            </svg>
+        <div class="actions rise d4">
+            <a class="btn btn--solid" href="contact.html"><span>Register interest</span> <span class="arrow" aria-hidden="true">&rarr;</span></a>
+            <a class="btn btn--wire" href="mailto:hello@b3nindustries.com?subject=Technical%20question%20%E2%80%94%20TCD-001">Ask a question <span class="arrow" aria-hidden="true">&rarr;</span></a>
         </div>
     </div>
-    <footer>
-        <p>&copy; 2026 B3N Industries. All rights reserved.</p>
-    </footer>
+
+    <!-- Product drawing plate -->
+    <div class="plate rise d5">
+        <div class="plate__glow" aria-hidden="true"></div>
+        <div class="plate__ring" aria-hidden="true"></div>
+
+        <span class="dim dim--id" aria-hidden="true">DWG. 001 / FOCUS</span>
+        <span class="dim dim--w" aria-hidden="true">&larr; 96.0 mm &rarr;</span>
+        <span class="dim dim--h" aria-hidden="true">&larr; 118.0 mm &rarr;</span>
+        <span class="callout callout--a" aria-hidden="true"><b>A</b>&nbsp;Printed shell</span>
+        <span class="callout callout--b" aria-hidden="true"><b>B</b>&nbsp;Recessed inlay</span>
+
+        <div class="plate__grab">
+        <svg class="product" viewBox="0 0 320 420" role="img" aria-label="Concept render of the B3N FOCUS wallet: a 3D-printed shell with a recessed leatherette panel">
+            <defs>
+                <linearGradient id="shell" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stop-color="#33363b"/>
+                    <stop offset="55%" stop-color="#1b1d21"/>
+                    <stop offset="100%" stop-color="#0e0f12"/>
+                </linearGradient>
+                <linearGradient id="inlay" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stop-color="#3b3f46"/>
+                    <stop offset="52%" stop-color="#22252a"/>
+                    <stop offset="100%" stop-color="#15171a"/>
+                </linearGradient>
+                <linearGradient id="edge" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#4a4e55"/>
+                    <stop offset="100%" stop-color="#101214"/>
+                </linearGradient>
+                <clipPath id="shellClip"><rect x="30" y="60" width="240" height="300" rx="16"/></clipPath>
+            </defs>
+
+            <!-- side depth -->
+            <rect x="256" y="74" width="16" height="272" rx="5" fill="url(#edge)" opacity="0.92"/>
+            <rect x="38" y="346" width="226" height="15" rx="5" fill="url(#edge)" opacity="0.72"/>
+
+            <!-- shell -->
+            <rect x="30" y="60" width="240" height="300" rx="16" fill="url(#shell)"/>
+
+            <!-- print layer lines -->
+            <g clip-path="url(#shellClip)" opacity="0.085">
+                <g stroke="#edebe6" stroke-width="1">
+                    <line x1="30" y1="76" x2="270" y2="76"/><line x1="30" y1="92" x2="270" y2="92"/>
+                    <line x1="30" y1="108" x2="270" y2="108"/><line x1="30" y1="124" x2="270" y2="124"/>
+                    <line x1="30" y1="140" x2="270" y2="140"/><line x1="30" y1="156" x2="270" y2="156"/>
+                    <line x1="30" y1="172" x2="270" y2="172"/><line x1="30" y1="188" x2="270" y2="188"/>
+                    <line x1="30" y1="204" x2="270" y2="204"/><line x1="30" y1="220" x2="270" y2="220"/>
+                    <line x1="30" y1="236" x2="270" y2="236"/><line x1="30" y1="252" x2="270" y2="252"/>
+                    <line x1="30" y1="268" x2="270" y2="268"/><line x1="30" y1="284" x2="270" y2="284"/>
+                    <line x1="30" y1="300" x2="270" y2="300"/><line x1="30" y1="316" x2="270" y2="316"/>
+                    <line x1="30" y1="332" x2="270" y2="332"/><line x1="30" y1="348" x2="270" y2="348"/>
+                </g>
+            </g>
+
+            <!-- corner fixings -->
+            <g fill="#0e1013" stroke="#5b626c" stroke-width="1">
+                <circle cx="52" cy="82" r="4.5"/><circle cx="248" cy="82" r="4.5"/>
+                <circle cx="52" cy="338" r="4.5"/><circle cx="248" cy="338" r="4.5"/>
+            </g>
+
+            <!-- recessed inlay -->
+            <rect x="60" y="96" width="180" height="228" rx="9" fill="#0a0b0d"/>
+            <rect x="64" y="100" width="172" height="220" rx="7" fill="url(#inlay)"/>
+
+            <!-- grain of the leatherette -->
+            <g opacity="0.16" stroke="#0a0b0d" stroke-width="1" fill="none">
+                <path d="M78 126 Q118 120 158 127 Q198 133 222 125"/>
+                <path d="M74 152 Q110 145 150 151 Q190 157 224 149"/>
+                <path d="M76 178 Q113 172 153 178 Q193 184 222 176"/>
+                <path d="M78 204 Q116 198 156 204 Q196 210 220 202"/>
+                <path d="M80 230 Q118 224 158 230 Q198 236 220 228"/>
+                <path d="M78 256 Q116 250 156 256 Q196 262 220 254"/>
+                <path d="M80 282 Q118 276 158 282 Q198 288 220 280"/>
+            </g>
+
+            <!-- stitch line, brand orange -->
+            <g class="stitch" stroke-width="1.6" stroke-linecap="round"
+               stroke-dasharray="7 7" fill="none" opacity="0.95">
+                <rect x="72" y="108" width="156" height="204" rx="4"/>
+            </g>
+
+            <!-- diagonal cut, lifted from the counter of the N -->
+            <path class="diag" d="M64 320 L236 100 L236 132 L96 320 Z" opacity="0.09"/>
+
+            <!-- engraved identity -->
+            <text x="150" y="216" text-anchor="middle" font-family="Archivo, 'Arial Black', sans-serif"
+                  font-weight="900" font-size="34" letter-spacing="4" fill="#0a0b0d" opacity="0.72">FOCUS</text>
+            <text x="150" y="236" text-anchor="middle" font-family="'IBM Plex Mono', monospace"
+                  font-size="9" letter-spacing="4" fill="#0a0b0d" opacity="0.6">B3N INDUSTRIES</text>
+
+            <!-- card slot + sheen -->
+            <rect x="92" y="292" width="116" height="34" rx="6" fill="#08090b" opacity="0.85"/>
+            <rect x="64" y="100" width="172" height="58" rx="7" fill="#ffffff" opacity="0.035"/>
+            <rect x="38" y="58" width="226" height="4" rx="2" fill="#4a4e55" opacity="0.75"/>
+        </svg>
+        </div>
+    </div>
+</header>
+
+<!-- ===================== SIGNAL BAND ===================== -->
+<div class="band" aria-hidden="true">
+    <div class="band__track">
+        <span>Engineering For The Future <em>&mdash; B3N &mdash;</em> Drawn, Printed, Finished <em>&mdash; B3N &mdash;</em> The Prototype <em>&mdash; B3N &mdash;</em> </span>
+        <span>Engineering For The Future <em>&mdash; B3N &mdash;</em> Drawn, Printed, Finished <em>&mdash; B3N &mdash;</em> The Prototype <em>&mdash; B3N &mdash;</em> </span>
+    </div>
+</div>
+
+<!-- ===================== CLOSE ===================== -->
+<section class="close">
+    <img class="close__mark" src="images/brand/b3n-mark-bone.svg" alt="" aria-hidden="true">
+    <h2>Built once.<br>Built right.</h2>
+    <p>The prototype is in development. Put your name against the drawing and you will hear from us
+       the day it leaves quality control &mdash; nothing else, ever.</p>
+    <div class="actions">
+        <a class="btn btn--solid" href="contact.html"><span>Register interest</span> <span class="arrow" aria-hidden="true">&rarr;</span></a>
+        <a class="btn btn--wire" href="mailto:hello@b3nindustries.com">Email the studio <span class="arrow" aria-hidden="true">&rarr;</span></a>
+    </div>
+</section>
+
+<!-- ===================== FOOTER ===================== -->
+<footer>
+    <div class="foot">
+        <div>
+            <img src="images/brand/b3n-mark-bone.svg" alt="B3N Industries">
+            <p>A small hardware studio drawing, printing and finishing objects meant to outlast the trend that sold them.</p>
+        </div>
+        <div>
+            <h5>Pages</h5>
+            <ul>
+                <li><a href="index.html">01 / Index</a></li>
+                <li><a href="contact.html">02 / Contact sheet</a></li>
+            </ul>
+        </div>
+        <div>
+            <h5>Direct</h5>
+            <ul>
+                <li><a href="mailto:hello@b3nindustries.com">hello@b3nindustries.com</a></li>
+                <li><a href="mailto:hello@b3nindustries.com?subject=Register%20interest%20%E2%80%94%20the%20prototype">Register interest</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="foot__base">
+        <span>&copy; 2026 B3N Industries</span>
+        <span>TCD-001 &mdash; REV. AUG 2026</span>
+        <span>Engineering For The Future</span>
+    </div>
+</footer>
 
 </body>
 </html>
