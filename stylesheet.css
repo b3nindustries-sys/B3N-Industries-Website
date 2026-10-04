@@ -214,7 +214,8 @@ body {
   justify-content: space-between;
   gap: 28px;
 }
-.business-card-identity h1 {
+.business-card-identity h1,
+.business-card-identity h2 {
   margin: 0;
   font: 800 clamp(2.4rem, 5vw, 5rem) / 1 var(--display);
   letter-spacing: -0.04em;
@@ -254,7 +255,8 @@ body {
 .business-card address a:hover {
   text-decoration: underline;
 }
-.business-card-services h2 {
+.business-card-services h2,
+.business-card-services h3 {
   margin: 25px 0 0;
   font: 800 clamp(1.25rem, 2vw, 1.9rem) var(--display);
 }
@@ -262,6 +264,63 @@ body {
   margin: 0;
   color: #40566b;
   letter-spacing: 0.08em;
+}
+.founder-section .section-head {
+  margin-bottom: 34px;
+}
+.founder-disclosure {
+  border: 1px solid var(--line-strong);
+  background: var(--ink-2);
+}
+.founder-disclosure summary {
+  min-height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 18px clamp(20px, 4vw, 42px);
+  color: var(--paper);
+  font: 600 clamp(0.85rem, 1.5vw, 1rem) var(--mono);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  list-style: none;
+}
+.founder-disclosure summary::-webkit-details-marker {
+  display: none;
+}
+.founder-disclosure summary:hover {
+  color: var(--accent);
+}
+.founder-disclosure summary span:last-child {
+  color: var(--accent);
+  font-size: 1.5rem;
+  transition: transform 0.25s var(--ease);
+}
+.founder-disclosure[open] summary span:last-child {
+  transform: rotate(45deg);
+}
+.founder-card-wrap {
+  padding: 0 clamp(14px, 3vw, 36px) clamp(24px, 4vw, 44px);
+}
+.founder-actions {
+  margin-top: 24px;
+}
+.tour-frame {
+  overflow: hidden;
+  border: 1px solid var(--line-strong);
+  box-shadow:
+    inset 5px 0 var(--accent),
+    inset -5px 0 var(--accent);
+  background: var(--ink-2);
+}
+.tour-frame iframe {
+  display: block;
+  width: 100%;
+  min-height: 600px;
+}
+.tour-actions {
+  margin-top: 24px;
 }
 @media (max-width: 580px) {
   .bench-workspace,
@@ -280,6 +339,9 @@ body {
   }
   .business-card-services p {
     letter-spacing: 0;
+  }
+  .tour-frame iframe {
+    min-height: 480px;
   }
 }
 body::before {

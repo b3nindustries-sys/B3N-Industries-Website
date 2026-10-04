@@ -3,24 +3,22 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>
-      Kyle Bennett | Founder, Design Engineer &amp; Inventor | B3N Industries
-    </title>
+    <title>About B3N Industries | Engineering Studio &amp; Kyle Bennett</title>
     <meta
       name="description"
-      content="Kyle B. R. Bennett is the founder, design engineer and inventor behind B3N Industries. View his business card and explore product design, prototyping, websites and 360° tours."
+      content="B3N Industries is a Caribbean-rooted engineering and product development studio founded by mechatronics engineer and inventor Kyle B. R. Bennett. Explore our mission, capabilities and founder."
     />
     <meta name="robots" content="index,follow,max-image-preview:large" />
     <link rel="canonical" href="https://b3nindustries.com/about.html" />
-    <meta property="og:type" content="profile" />
+    <meta property="og:type" content="website" />
     <meta property="og:site_name" content="B3N Industries" />
     <meta
       property="og:title"
-      content="Kyle Bennett | Founder, Design Engineer &amp; Inventor"
+      content="About B3N Industries | Engineering for the Future"
     />
     <meta
       property="og:description"
-      content="Meet the founder of B3N Industries: product design, prototyping, websites and 360° tours."
+      content="A Caribbean-rooted engineering studio turning ideas into products, prototypes and digital experiences."
     />
     <meta property="og:url" content="https://b3nindustries.com/about.html" />
     <meta
@@ -52,22 +50,41 @@
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
-        "@type": "ProfilePage",
-        "@id": "https://b3nindustries.com/about.html#profile",
-        "url": "https://b3nindustries.com/about.html",
-        "name": "Kyle Bennett at B3N Industries",
-        "mainEntity": {
-          "@type": "Person",
-          "@id": "https://b3nindustries.com/about.html#kyle-bennett",
-          "name": "Kyle B. R. Bennett",
-          "alternateName": "Kyle Bennett",
-          "url": "https://b3nindustries.com/about.html",
-          "jobTitle": "Founder, Design Engineer and Inventor",
-          "description": "Founder, design engineer and inventor at B3N Industries, working in product design, prototyping, websites and 360-degree tours.",
-          "worksFor": { "@id": "https://b3nindustries.com/#organization" },
-          "email": "kyle.b.r.bennett@gmail.com",
-          "telephone": "+1-475-313-6591"
-        }
+        "@graph": [
+          {
+            "@type": "AboutPage",
+            "@id": "https://b3nindustries.com/about.html#about",
+            "url": "https://b3nindustries.com/about.html",
+            "name": "About B3N Industries",
+            "description": "Company profile for B3N Industries, a Caribbean-rooted engineering and product development studio serving inventors, creators and businesses.",
+            "mainEntity": { "@id": "https://b3nindustries.com/#organization" }
+          },
+          {
+            "@type": "Organization",
+            "@id": "https://b3nindustries.com/#organization",
+            "name": "B3N Industries",
+            "url": "https://b3nindustries.com/",
+            "logo": "https://b3nindustries.com/images/brand/b3n-logo-onink.svg",
+            "description": "A Caribbean-rooted engineering, product design and prototyping studio working across physical products, websites and interactive 360-degree experiences.",
+            "founder": {
+              "@id": "https://b3nindustries.com/about.html#kyle-bennett"
+            },
+            "areaServed": ["United States", "Trinidad and Tobago"]
+          },
+          {
+            "@type": "Person",
+            "@id": "https://b3nindustries.com/about.html#kyle-bennett",
+            "name": "Kyle B. R. Bennett",
+            "alternateName": "Kyle Bennett",
+            "url": "https://kylebrbennett.com",
+            "sameAs": ["https://kylebrbennett.com"],
+            "jobTitle": "Founder, Design Engineer and Inventor",
+            "description": "Trinidadian mechatronics engineer, inventor and founder of B3N Industries, based in Pittsburgh, Pennsylvania.",
+            "worksFor": { "@id": "https://b3nindustries.com/#organization" },
+            "email": "kyle.b.r.bennett@gmail.com",
+            "telephone": "+1-475-313-6591"
+          }
+        ]
       }
     </script>
   </head>
@@ -108,55 +125,133 @@
         </button>
       </div>
     </nav>
-    <main id="main-content" tabindex="-1" class="about-card-page">
-      <div class="shell">
-        <p class="eyebrow">B3N Industries / Founder</p>
-        <div
-          class="business-card business-card-front"
-          aria-label="B3N Industries business card front"
-        >
-          <img
-            src="images/brand/b3n-mark-bone.svg"
-            alt="B3N Industries geometric BN logo"
-          />
-          <p>B3N Industries</p>
-          <span>Engineering for the future</span>
+    <main id="main-content" tabindex="-1">
+      <header class="page-hero">
+        <div class="shell">
+          <p class="eyebrow">About B3N / Bennett's Brilliant Notions</p>
+          <h1>Engineering ideas<br />into useful reality.</h1>
+          <p class="lede">
+            B3N Industries is a Caribbean-rooted engineering, invention and
+            product development studio. We help inventors, creators and small
+            businesses move from an uncertain idea to a clear design, working
+            prototype or digital experience.
+          </p>
         </div>
-        <article
-          class="business-card business-card-back"
-          id="kyle-bennett"
-          aria-labelledby="founder-name"
-        >
-          <div class="business-card-identity">
-            <div>
-              <h1 id="founder-name">Kyle Bennett</h1>
-              <p class="founder-full-name">Kyle B. R. Bennett</p>
-              <p class="founder-role">
-                Founder <span aria-hidden="true">|</span> Design Engineer
-                <span aria-hidden="true">|</span> Inventor
-              </p>
-              <div class="business-card-rule" aria-hidden="true"></div>
-              <address>
-                <a href="mailto:kyle.b.r.bennett@gmail.com"
-                  >kyle.b.r.bennett@gmail.com</a
-                ><a href="tel:+14753136591">(475) 313-6591</a
-                ><a href="index.html">b3nindustries.com</a>
-              </address>
-            </div>
-            <img
-              src="images/brand/b3n-logo-black.svg"
-              alt="B3N Industries logo"
-            />
+      </header>
+
+      <section class="section">
+        <div class="shell content-grid">
+          <div class="side-note">
+            Pittsburgh, Pennsylvania<br />Trinidad &amp; Tobago roots<br />Built
+            for practical progress
           </div>
-          <div class="business-card-services">
-            <h2>B3N Industries</h2>
+          <div class="prose">
+            <h2>What B3N Industries does</h2>
             <p>
-              Product Design <span aria-hidden="true">•</span> Prototyping
-              <span aria-hidden="true">•</span> Websites &amp; 360° Tours
+              We combine product design, CAD, rapid prototyping, mechatronics
+              and manufacturing-minded development with websites and interactive
+              360° tours. That mix lets B3N work across physical and digital
+              systems without losing sight of the person who has to use them.
+            </p>
+            <p>
+              Our work includes engineering consulting, prototype development,
+              original products such as the FOCUS Wallet, practical tools such
+              as BENCH and immersive property experiences through SPACES.
+            </p>
+            <h3>Our mission</h3>
+            <p>
+              Turn the imaginary into real things—and make serious engineering
+              support more understandable and accessible, especially for
+              independent inventors and Caribbean innovators.
+            </p>
+            <div class="actions">
+              <a class="btn btn-solid" href="services.html"
+                >Explore our services <span aria-hidden="true">→</span></a
+              ><a class="btn" href="contact.html"
+                >Start a project <span aria-hidden="true">→</span></a
+              >
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section founder-section" id="founder">
+        <div class="shell">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">Founder / Design Engineer / Inventor</p>
+              <h2>Kyle<br />Bennett.</h2>
+            </div>
+            <p>
+              B3N was founded by Kyle B. R. Bennett, a Trinidadian mechatronics
+              engineer working across invention, prototyping, robotics and
+              technical storytelling.
             </p>
           </div>
-        </article>
-      </div>
+
+          <details class="founder-disclosure">
+            <summary>
+              <span>Open Kyle's founder card</span>
+              <span aria-hidden="true">+</span>
+            </summary>
+            <div class="founder-card-wrap" id="kyle-bennett">
+              <div
+                class="business-card business-card-front"
+                aria-label="B3N Industries business card front"
+              >
+                <img
+                  src="images/brand/b3n-mark-bone.svg"
+                  alt="B3N Industries geometric BN logo"
+                />
+                <p>B3N Industries</p>
+                <span>Engineering for the future</span>
+              </div>
+              <article
+                class="business-card business-card-back"
+                aria-labelledby="founder-name"
+              >
+                <div class="business-card-identity">
+                  <div>
+                    <h2 id="founder-name">Kyle Bennett</h2>
+                    <p class="founder-full-name">Kyle B. R. Bennett</p>
+                    <p class="founder-role">
+                      Founder <span aria-hidden="true">|</span> Design Engineer
+                      <span aria-hidden="true">|</span> Inventor
+                    </p>
+                    <div class="business-card-rule" aria-hidden="true"></div>
+                    <address>
+                      <a href="mailto:kyle.b.r.bennett@gmail.com"
+                        >kyle.b.r.bennett@gmail.com</a
+                      ><a href="tel:+14753136591">(475) 313-6591</a
+                      ><a href="index.html">b3nindustries.com</a>
+                    </address>
+                  </div>
+                  <img
+                    src="images/brand/b3n-logo-black.svg"
+                    alt="B3N Industries logo"
+                  />
+                </div>
+                <div class="business-card-services">
+                  <h3>B3N Industries</h3>
+                  <p>
+                    Product Design <span aria-hidden="true">•</span> Prototyping
+                    <span aria-hidden="true">•</span> Websites &amp; 360° Tours
+                  </p>
+                </div>
+              </article>
+              <div class="actions founder-actions">
+                <a
+                  class="btn btn-solid"
+                  href="https://kylebrbennett.com"
+                  rel="me"
+                  >Visit Kyle's personal website
+                  <span aria-hidden="true">↗</span></a
+                >
+              </div>
+            </div>
+          </details>
+        </div>
+      </section>
     </main>
     <footer>
       <div class="footer-grid">

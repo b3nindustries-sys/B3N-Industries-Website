@@ -9,9 +9,9 @@ Static, responsive company website for [b3nindustries.com](https://b3nindustries
 - `products.html` — FOCUS and B3N product development programs
 - `focus.html` / `focus.css` / `focus.js` — dedicated FOCUS Wallet page with the technical-drawing presentation and draggable product render
 - `bench.html` — standalone BENCH measurement comparison page, supplied by Kyle; its styling, reference data and behavior are self-contained
-- `spaces.html` — SPACES 360° virtual tour service
+- `spaces.html` — SPACES 360° virtual tour service with an embedded Kim Apt 1 example
 - `projects.html` — selected work and research programs
-- `about.html` — Kyle Bennett's digital business card and founder profile
+- `about.html` — company profile, search-focused service context and a collapsible Kyle Bennett founder card linked to `kylebrbennett.com`
 - `contact.html` — project inquiry information and direct email
 
 ## Search foundations
