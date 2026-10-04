@@ -1,0 +1,2304 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="BENCH turns any measurement into something you already know — across length, time, power, and water.">
+<meta name="theme-color" content="#0a1626" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#f7f3ea" media="(prefers-color-scheme: light)">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="BENCH">
+<title>BENCH — make any measurement human</title>
+
+
+
+<!-- Applies the saved theme before first paint, so light-mode users never see a navy flash. -->
+<script>
+/* Runs before first paint: applies the saved theme so light-mode users never
+   see a flash of the dark background. Kept tiny and dependency-free. */
+(function () {
+  try {
+    var saved = JSON.parse(localStorage.getItem('bench:v2') || '{}');
+    if (saved.theme === 'light' || saved.theme === 'dark') {
+      document.documentElement.dataset.theme = saved.theme;
+      return;
+    }
+  } catch (e) { /* ignore */ }
+  if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
+    document.documentElement.dataset.theme = 'light';
+  }
+})();
+
+</script>
+<style>
+/* BENCH — blueprint identity.
+   Fonts are system stacks: no third-party requests, works offline, no
+   privacy question, and no flash of unstyled text. */
+
+:root {
+  --font-display: ui-sans-serif, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-body: ui-sans-serif, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+
+  --surface: #0a1626;
+  --panel: #142943;
+  --rule: #24405f;
+  --accent: #c9a25e;
+  --accent-bright: #e0be7f;
+  --accent-soft: rgba(201, 162, 94, 0.14);
+  --ink: #f4efe4;
+  --ink-dim: #cfc8b6;
+  --muted: #7d93ab;
+  --teal: #5fa8a0;
+  --rust: #c0674a;
+  --track: rgba(255, 255, 255, 0.05);
+}
+
+:root[data-theme="light"] {
+  --surface: #f7f3ea;
+  --panel: #ffffff;
+  --rule: #ddd4bd;
+  --accent: #a67c2e;
+  --accent-bright: #7d5717;
+  --accent-soft: rgba(166, 124, 46, 0.12);
+  --ink: #1c1a16;
+  --ink-dim: #4a453b;
+  --muted: #5a6b7d;
+  --teal: #2f7a72;
+  --rust: #a34d33;
+  --track: rgba(0, 0, 0, 0.07);
+}
+
+* { box-sizing: border-box; }
+
+html { color-scheme: dark; }
+:root[data-theme="light"] { color-scheme: light; }
+
+body {
+  margin: 0;
+  padding: 40px 24px 96px;
+  min-height: 100vh;
+  background-color: var(--surface);
+  background-image:
+    linear-gradient(var(--rule) 1px, transparent 1px),
+    linear-gradient(90deg, var(--rule) 1px, transparent 1px);
+  background-size: 32px 32px;
+  background-position: -1px -1px;
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.5;
+  -webkit-text-size-adjust: 100%;
+}
+
+.wrap { max-width: 820px; margin: 0 auto; }
+
+h1, h2, p, ul, ol { margin: 0; }
+ul { list-style: none; padding: 0; }
+
+/* ------------------------------------------------------------- header -- */
+
+.masthead {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px; flex-wrap: wrap;
+  padding-bottom: 16px; margin-bottom: 20px;
+  border-bottom: 1px solid var(--rule);
+}
+.logo {
+  font-family: var(--font-display); font-weight: 700; font-size: 22px;
+  letter-spacing: 0.05em; margin: 0;
+}
+.logo span { color: var(--accent); }
+.masthead-right { display: flex; align-items: center; gap: 14px; }
+.org { font-family: var(--font-mono); font-size: 11px; color: var(--muted); letter-spacing: 0.06em; }
+
+.lede {
+  font-family: var(--font-display); font-size: 19px; font-weight: 600;
+  letter-spacing: -0.01em; margin-bottom: 6px;
+}
+.sub { font-size: 14px; color: var(--ink-dim); margin-bottom: 26px; max-width: 62ch; }
+
+/* -------------------------------------------------------------- panels -- */
+
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+.panel--accent { border-color: var(--accent); }
+
+.panel-label {
+  font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.09em;
+  text-transform: uppercase; color: var(--accent-bright); margin-bottom: 4px;
+}
+.panel-hint { font-family: var(--font-mono); font-size: 11px; color: var(--muted); margin-bottom: 12px; }
+
+.field-row { display: flex; gap: 10px; align-items: stretch; }
+.field-row input[type="text"],
+.field-row input[type="number"],
+.field-row input[type="search"] {
+  flex: 1; min-width: 0;
+  background: var(--surface); color: var(--ink);
+  border: 1px solid var(--rule); border-radius: 3px;
+  font-family: var(--font-mono); font-size: 15px;
+  padding: 12px 14px; min-height: 48px;
+}
+input::placeholder { color: var(--muted); }
+
+.primary-btn {
+  background: var(--accent); color: #0a1626; border: none; border-radius: 3px;
+  font-family: var(--font-display); font-weight: 600; font-size: 14px;
+  padding: 0 20px; min-height: 48px; cursor: pointer; white-space: nowrap;
+}
+.primary-btn:hover { background: var(--accent-bright); }
+
+.ghost-btn {
+  background: transparent; border: 1px solid var(--rule); color: var(--muted);
+  font-family: var(--font-mono); font-size: 12px;
+  padding: 10px 16px; min-height: 44px; border-radius: 22px; cursor: pointer;
+}
+.ghost-btn:hover { border-color: var(--accent); color: var(--accent-bright); }
+
+.row-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+
+/* ------------------------------------------------------------ controls -- */
+
+.control-group { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+.control-group[hidden] { display: none; }
+
+.chip {
+  font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.04em;
+  background: var(--panel); border: 1px solid var(--rule); color: var(--ink-dim);
+  padding: 10px 16px; min-height: 44px; border-radius: 22px; cursor: pointer;
+}
+.chip.is-active { border-color: var(--accent); color: var(--accent-bright); background: var(--accent-soft); }
+.chip--geek.is-active { border-color: var(--rust); color: var(--rust); background: rgba(192, 103, 74, 0.12); }
+
+.group-label {
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--muted);
+  width: 100%; margin-bottom: -2px;
+}
+
+.value-panel { position: relative; }
+.value-panel::before {
+  content: ''; position: absolute; inset: 0 20px auto 20px; height: 3px;
+  background: repeating-linear-gradient(90deg, var(--accent) 0 2px, transparent 2px 10px);
+}
+.value-panel input[type="number"] { font-size: 24px; }
+select.unit {
+  background: var(--surface); color: var(--accent-bright);
+  border: 1px solid var(--rule); border-radius: 3px;
+  font-family: var(--font-mono); font-size: 14px;
+  padding: 0 12px; min-height: 48px; max-width: 190px; cursor: pointer;
+}
+
+.presets { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+.preset {
+  font-family: var(--font-mono); font-size: 12px;
+  background: transparent; border: 1px solid var(--rule); color: var(--muted);
+  padding: 10px 12px; min-height: 44px; border-radius: 3px; cursor: pointer;
+}
+.preset:hover { border-color: var(--accent); color: var(--accent-bright); }
+
+/* -------------------------------------------------------------- search -- */
+
+.search-results { border: 1px solid var(--rule); border-radius: 3px; margin-top: 12px; overflow: hidden; }
+.search-results li + li { border-top: 1px solid var(--rule); }
+.search-result {
+  display: flex; align-items: center; gap: 12px; width: 100%;
+  background: transparent; border: none; cursor: pointer;
+  padding: 12px 14px; min-height: 56px; text-align: left; color: inherit;
+}
+.search-result:hover { background: var(--accent-soft); }
+.search-icon { font-size: 20px; }
+.search-text { flex: 1; display: flex; flex-direction: column; }
+.search-name { font-size: 14px; font-weight: 500; }
+.search-meta { font-family: var(--font-mono); font-size: 11px; color: var(--muted); }
+.search-go { font-family: var(--font-mono); font-size: 11px; color: var(--accent-bright); }
+.search-hint { font-family: var(--font-mono); font-size: 12px; color: var(--muted); margin-top: 10px; }
+
+/* --------------------------------------------------------- direct match -- */
+
+.match {
+  display: flex; gap: 16px; align-items: flex-start;
+  border: 1px solid var(--accent); border-left-width: 4px; border-radius: 3px;
+  background: var(--accent-soft);
+  padding: 16px 18px; margin-bottom: 18px;
+}
+.match--near { border-color: var(--rule); border-left-color: var(--teal); background: var(--panel); }
+.match-icon { font-size: 30px; line-height: 1; }
+.match-eyebrow {
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--accent-bright); margin-bottom: 4px;
+}
+.match--near .match-eyebrow { color: var(--teal); }
+.match-headline { font-family: var(--font-display); font-size: 19px; font-weight: 600; letter-spacing: -0.01em; }
+.match-detail { font-family: var(--font-mono); font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+/* ------------------------------------------------------------- results -- */
+
+.results-head {
+  display: flex; justify-content: space-between; align-items: baseline; gap: 10px;
+  font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.09em;
+  text-transform: uppercase; color: var(--muted); margin-bottom: 12px;
+}
+.axis-note { font-family: var(--font-mono); font-size: 11px; color: var(--muted); margin-bottom: 12px; }
+.empty { font-family: var(--font-mono); font-size: 13px; color: var(--muted); padding: 24px 0; }
+.warn {
+  font-family: var(--font-mono); font-size: 11.5px; color: var(--rust); line-height: 1.5;
+  border: 1px solid var(--rule); border-left: 3px solid var(--rust); border-radius: 3px;
+  background: var(--panel); padding: 10px 14px; margin-bottom: 12px;
+}
+
+.bar-row {
+  display: grid;
+  grid-template-areas: "icon name track ratio";
+  grid-template-columns: 30px 150px 1fr 78px;
+  align-items: center; gap: 12px;
+  padding: 10px 0; border-bottom: 1px solid var(--rule);
+}
+.bar-row:last-child { border-bottom: none; }
+.bar-row--you {
+  background: var(--accent-soft);
+  border-bottom: 1px solid var(--accent);
+  padding: 12px 8px; margin: 0 -8px 4px;
+  border-radius: 3px;
+  position: sticky; top: 0; z-index: 2;
+  backdrop-filter: blur(6px);
+}
+.bar-icon { grid-area: icon; font-size: 20px; text-align: center; }
+.bar-name { grid-area: name; font-size: 13px; font-weight: 500; line-height: 1.3; }
+.bar-name small { display: block; font-family: var(--font-mono); font-size: 10.5px; color: var(--muted); font-weight: 400; margin-top: 2px; }
+.bar-track { grid-area: track; background: var(--track); border-radius: 2px; height: 22px; overflow: hidden; }
+.bar-fill { display: block; height: 100%; border-radius: 2px; transition: width .45s cubic-bezier(.2,.8,.2,1); }
+.bar-fill--you { background: repeating-linear-gradient(45deg, var(--accent) 0 6px, var(--accent-bright) 6px 12px); }
+.bar-ratio { grid-area: ratio; font-family: var(--font-mono); font-size: 12px; text-align: right; color: var(--accent-bright); font-weight: 700; }
+.bar-ratio--you { color: var(--accent); letter-spacing: 0.08em; text-transform: uppercase; font-size: 11px; }
+
+.you-pin {
+  display: flex; justify-content: space-between; align-items: baseline; gap: 10px;
+  border: 1px solid var(--accent); border-left-width: 4px; border-radius: 3px;
+  background: var(--accent-soft); padding: 12px 14px; margin-bottom: 14px;
+}
+.you-pin-label { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent-bright); }
+.you-pin-value { font-family: var(--font-mono); font-size: 16px; font-weight: 700; }
+
+.stack-row { padding: 14px 0; border-bottom: 1px solid var(--rule); }
+.stack-row:last-child { border-bottom: none; }
+.stack-head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+.stack-name { font-size: 13px; font-weight: 600; }
+.stack-name small { font-family: var(--font-mono); font-size: 10.5px; color: var(--muted); font-weight: 400; }
+.stack-count { font-family: var(--font-mono); font-size: 15px; font-weight: 700; color: var(--accent-bright); }
+.stack-icons { font-size: 15px; line-height: 1.6; letter-spacing: 1px; word-break: break-word; margin-top: 8px; }
+.icon-partial { opacity: 0.35; clip-path: inset(0 55% 0 0); display: inline-block; }
+
+.sil-scroll { overflow-x: auto; padding-top: 8px; }
+.sil-scroll svg { font-family: var(--font-body); }
+
+.qualifier { font-size: 11.5px; font-style: italic; color: var(--muted); margin-top: 4px; line-height: 1.4; }
+
+.src { display: inline-block; }
+.src summary { cursor: pointer; color: var(--accent-bright); list-style: none; }
+.src summary::-webkit-details-marker { display: none; }
+.src-body { display: block; font-family: var(--font-mono); font-size: 10.5px; color: var(--muted); padding-top: 3px; }
+
+/* --------------------------------------------------------- interpreter -- */
+
+.answer { border-left: 3px solid var(--accent); background: var(--surface); border-radius: 3px; padding: 14px 16px; margin-top: 14px; }
+.answer-eyebrow { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent-bright); margin-bottom: 6px; }
+.answer-text { font-size: 16px; line-height: 1.45; }
+.answer-visual {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--rule);
+}
+.answer-visual .axis-note { margin-bottom: 6px; }
+.answer-visual .warn { margin-bottom: 8px; }
+.sil-scroll--compact { padding-top: 0; }
+.sil-scroll--compact svg { max-width: 100%; height: auto; }
+
+.interp-label { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin: 16px 0 6px; }
+.interp-list li { font-size: 13.5px; color: var(--ink-dim); padding: 7px 0; border-bottom: 1px solid var(--rule); }
+.interp-list li:last-child { border-bottom: none; }
+.interp-list small { font-family: var(--font-mono); font-size: 11px; color: var(--muted); }
+.interp-caveat, .interp-sources { font-size: 12.5px; color: var(--muted); line-height: 1.5; }
+.interp-sources { font-family: var(--font-mono); font-size: 11px; margin-top: 8px; }
+.interp-assumption { font-size: 12.5px; color: var(--ink-dim); margin-top: 10px; }
+.interp-assumption b { color: var(--accent-bright); }
+.interp-error { font-family: var(--font-mono); font-size: 12.5px; color: var(--rust); margin-top: 12px; line-height: 1.5; }
+.interp-hint { font-family: var(--font-mono); font-size: 12.5px; color: var(--muted); margin-top: 12px; }
+.action-msg { font-family: var(--font-mono); font-size: 11.5px; color: var(--accent-bright); margin-top: 8px; min-height: 1em; }
+
+/* ------------------------------------------------------------- footer --- */
+
+.disclaimer {
+  font-family: var(--font-mono); font-size: 11px; color: var(--muted); line-height: 1.55;
+  background: var(--panel); border: 1px solid var(--rule); border-radius: 3px;
+  padding: 12px 14px; margin-top: 28px;
+}
+.colophon { font-family: var(--font-mono); font-size: 10.5px; color: var(--muted); text-align: center; margin-top: 24px; letter-spacing: 0.05em; }
+
+.visually-hidden {
+  position: absolute; width: 1px; height: 1px; overflow: hidden;
+  clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap;
+}
+
+:where(button, input, select, summary, a):focus-visible {
+  outline: 2px solid var(--accent-bright);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+}
+
+@media (max-width: 640px) {
+  body { padding: 24px 14px 72px; }
+  .field-row { flex-direction: column; }
+  select.unit { max-width: none; }
+  .bar-row {
+    grid-template-areas:
+      "icon name  ratio"
+      "icon track track";
+    grid-template-columns: 30px 1fr 68px;
+    row-gap: 8px;
+  }
+  .bar-row--you { position: static; }
+  .match { flex-direction: column; gap: 10px; }
+  .chip { flex: 1 1 auto; text-align: center; }
+}
+
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="masthead">
+    <h1 class="logo">B3N <span>BENCH</span></h1>
+    <div class="masthead-right">
+      <span class="org">B3N Industries</span>
+      <button class="ghost-btn" id="themeToggle" type="button">Light mode</button>
+    </div>
+  </header>
+
+  <p class="lede">Enter any measurement. BENCH makes it human.</p>
+  <p class="sub">Bringing Every Number Contextually to Humans. A measurement only means something next to
+    something you already know — across length, time, power, and water.</p>
+
+  <!-- Interpreter -->
+  <section class="panel panel--accent" aria-labelledby="interpHeading">
+    <h2 class="panel-label" id="interpHeading">I have a number</h2>
+    <p class="panel-hint">Try 500 MW · 1.5 GW · 12 kilometres · 3 million litres · 1e9 W · 85 feet</p>
+    <div class="field-row">
+      <input id="interpreterInput" type="text" inputmode="text" autocomplete="off"
+             placeholder="Type any measurement" aria-label="Measurement to interpret">
+      <button class="primary-btn" id="interpretBtn" type="button">Interpret</button>
+    </div>
+    <div id="interpreterOut"></div>
+  </section>
+
+  <!-- Reference search: the reverse entry path. "How big is a Gundam?" is the
+       same question as "what is 18 m?", and both feed the same engine. -->
+  <section class="panel panel--accent" aria-labelledby="searchHeading">
+    <h2 class="panel-label" id="searchHeading">I have a thing</h2>
+    <p class="panel-hint">Search everything BENCH knows and compare it to the rest.</p>
+    <div class="field-row">
+      <input id="searchInput" type="search" autocomplete="off"
+             placeholder="Whale, Eiffel, data centre, Gundam…" aria-label="Search references">
+    </div>
+    <div id="searchOut" aria-live="polite"></div>
+  </section>
+
+  <!-- Dimension -->
+  <div class="control-group" role="group" aria-label="Dimension">
+    <button class="chip" type="button" data-dimension-btn="length" aria-pressed="false">📏 Length</button>
+    <button class="chip" type="button" data-dimension-btn="time" aria-pressed="false">⏱ Time</button>
+    <button class="chip" type="button" data-dimension-btn="power" aria-pressed="false">⚡ Power</button>
+    <button class="chip" type="button" data-dimension-btn="water" aria-pressed="false">💧 Water</button>
+  </div>
+
+  <!-- Water basis: volumes and flows are never ranked against each other -->
+  <div class="control-group" id="basisGroup" role="group" aria-label="Water measurement type" hidden>
+    <span class="group-label">Measuring</span>
+    <button class="chip" type="button" data-basis-btn="volume" aria-pressed="false">A fixed volume</button>
+    <button class="chip" type="button" data-basis-btn="flow" aria-pressed="false">An amount per day</button>
+  </div>
+
+  <!-- Value -->
+  <section class="panel value-panel" aria-label="Your measurement">
+    <div class="field-row">
+      <input id="valueInput" type="number" inputmode="decimal" min="0" step="any"
+             placeholder="85" aria-label="Measurement value">
+      <select class="unit" id="unitSelect" aria-label="Unit"></select>
+    </div>
+    <div class="presets" id="presets"></div>
+  </section>
+
+  <!-- Mode -->
+  <div class="control-group" role="group" aria-label="Comparison view">
+    <button class="chip" type="button" data-mode-btn="bars" aria-pressed="false">Side by side</button>
+    <button class="chip" type="button" data-mode-btn="stack" aria-pressed="false">Stack</button>
+    <button class="chip" type="button" data-mode-btn="silhouette" aria-pressed="false">Silhouette</button>
+  </div>
+
+  <!-- Category -->
+  <div class="control-group" role="group" aria-label="Reference set">
+    <button class="chip" type="button" data-category-btn="explorer" aria-pressed="false">◎ Explorer</button>
+    <button class="chip chip--geek" type="button" data-category-btn="geek" aria-pressed="false">◆ Geek</button>
+  </div>
+
+  <div id="matchSlot"></div>
+
+  <div class="results-head">
+    <span id="modeTitle">Compared with</span>
+    <span id="poolCount"></span>
+  </div>
+
+  <!-- The live region carries a one-line answer, not the whole table. -->
+  <p class="visually-hidden" id="summary" role="status" aria-live="polite"></p>
+  <div id="results"></div>
+
+  <p class="disclaimer">BENCH gives educational scale comparisons. Values are rounded or approximate and are not
+    suitable for engineering, medical, legal, or safety-critical decisions.</p>
+
+  <p class="colophon">BENCH beta · curated reference set · length / time / power / water · full metric prefixes</p>
+</div>
+
+<script>
+(function () {
+"use strict";
+/* ---- src/lib/escape.js ---- */
+/**
+ * Escape a value for interpolation into innerHTML.
+ * The reference data is static today, but the moment any of it comes from a
+ * CMS, a URL parameter or user submissions, unescaped interpolation is an XSS
+ * hole. Every dynamic string in the render path goes through here.
+ */
+function esc(value) {
+  return String(value ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+/** Escape for use inside an SVG/HTML attribute value. */
+function escAttr(value) {
+  return esc(value);
+}
+
+/* ---- src/lib/units.js ---- */
+/** Unit definitions, conversion factors, and unit-name resolution. */
+
+const UNIT_OPTIONS = {
+  length: [
+    ['nm', 'nanometres'], ['µm', 'micrometres'], ['mm', 'millimetres'], ['cm', 'centimetres'],
+    ['dm', 'decimetres'], ['m', 'metres'], ['dam', 'decametres'], ['hm', 'hectometres'],
+    ['km', 'kilometres'], ['in', 'inches'], ['ft', 'feet'], ['yd', 'yards'], ['mi', 'miles'],
+  ],
+  time: [
+    ['ns', 'nanoseconds'], ['µs', 'microseconds'], ['ms', 'milliseconds'], ['sec', 'seconds'],
+    ['min', 'minutes'], ['hr', 'hours'], ['day', 'days'], ['wk', 'weeks'], ['yr', 'years'],
+  ],
+  power: [
+    ['nW', 'nanowatts'], ['µW', 'microwatts'], ['mW', 'milliwatts'], ['cW', 'centiwatts'],
+    ['dW', 'deciwatts'], ['W', 'watts'], ['daW', 'decawatts'], ['hW', 'hectowatts'],
+    ['kW', 'kilowatts'], ['MW', 'megawatts'], ['GW', 'gigawatts'], ['TW', 'terawatts'],
+    ['PW', 'petawatts'], ['hp', 'horsepower'],
+  ],
+  water: [
+    ['nL', 'nanolitres'], ['µL', 'microlitres'], ['mL', 'millilitres'], ['cL', 'centilitres'],
+    ['dL', 'decilitres'], ['L', 'litres'], ['daL', 'decalitres'], ['hL', 'hectolitres'],
+    ['kL', 'kilolitres'], ['ML', 'megalitres'], ['GL', 'gigalitres'], ['TL', 'teralitres'],
+    ['gal', 'US gallons'], ['m3', 'cubic metres'],
+  ],
+};
+
+const UNIT_MULT = {
+  // length -> metres
+  nm: 1e-9, 'µm': 1e-6, mm: 1e-3, cm: 1e-2, dm: 1e-1, m: 1, dam: 1e1, hm: 1e2, km: 1e3,
+  in: 0.0254, ft: 0.3048, yd: 0.9144, mi: 1609.344,
+  // time -> seconds
+  ns: 1e-9, 'µs': 1e-6, ms: 1e-3, sec: 1, min: 60, hr: 3600, day: 86400, wk: 604800, yr: 31536000,
+  // power -> watts
+  nW: 1e-9, 'µW': 1e-6, mW: 1e-3, cW: 1e-2, dW: 1e-1, W: 1, daW: 1e1, hW: 1e2,
+  kW: 1e3, MW: 1e6, GW: 1e9, TW: 1e12, PW: 1e15, hp: 745.7,
+  // water -> litres
+  nL: 1e-9, 'µL': 1e-6, mL: 1e-3, cL: 1e-2, dL: 1e-1, L: 1, daL: 1e1, hL: 1e2,
+  kL: 1e3, ML: 1e6, GL: 1e9, TL: 1e12, gal: 3.785411784, m3: 1000,
+};
+
+const DEFAULT_UNIT = { length: 'm', time: 'hr', power: 'MW', water: 'L' };
+const BASE_UNIT = { length: 'm', time: 'sec', power: 'W', water: 'L' };
+
+/** unit key -> dimension */
+const DIMENSION_OF_UNIT = {};
+for (const dim of Object.keys(UNIT_OPTIONS)) {
+  for (const [key] of UNIT_OPTIONS[dim]) DIMENSION_OF_UNIT[key] = dim;
+}
+
+/**
+ * Spelled-out and lowercase unit names.
+ * Case-sensitive symbols are resolved first; this table is the fallback, so
+ * anything ambiguous here must also appear in AMBIGUOUS_UNITS below.
+ */
+const UNIT_WORDS = {
+  nanometer: 'nm', nanometers: 'nm', nanometre: 'nm', nanometres: 'nm',
+  micrometer: 'µm', micrometers: 'µm', micron: 'µm', microns: 'µm', um: 'µm',
+  millimeter: 'mm', millimeters: 'mm', millimetre: 'mm', millimetres: 'mm',
+  centimeter: 'cm', centimeters: 'cm', centimetre: 'cm', centimetres: 'cm',
+  meter: 'm', meters: 'm', metre: 'm', metres: 'm',
+  kilometer: 'km', kilometers: 'km', kilometre: 'km', kilometres: 'km', klick: 'km', klicks: 'km',
+  inch: 'in', inches: 'in', foot: 'ft', feet: 'ft', yard: 'yd', yards: 'yd', mile: 'mi', miles: 'mi',
+
+  nanosecond: 'ns', nanoseconds: 'ns', microsecond: 'µs', microseconds: 'µs', us: 'µs',
+  millisecond: 'ms', milliseconds: 'ms', second: 'sec', seconds: 'sec', secs: 'sec', s: 'sec',
+  minute: 'min', minutes: 'min', mins: 'min', hour: 'hr', hours: 'hr', hrs: 'hr', h: 'hr',
+  day: 'day', days: 'day', week: 'wk', weeks: 'wk', year: 'yr', years: 'yr', yrs: 'yr',
+
+  nanowatt: 'nW', nanowatts: 'nW', microwatt: 'µW', microwatts: 'µW', uw: 'µW',
+  milliwatt: 'mW', milliwatts: 'mW', watt: 'W', watts: 'W',
+  kilowatt: 'kW', kilowatts: 'kW', megawatt: 'MW', megawatts: 'MW',
+  gigawatt: 'GW', gigawatts: 'GW', terawatt: 'TW', terawatts: 'TW', petawatt: 'PW', petawatts: 'PW',
+  horsepower: 'hp',
+
+  nanoliter: 'nL', nanoliters: 'nL', microliter: 'µL', microliters: 'µL', ul: 'µL',
+  milliliter: 'mL', milliliters: 'mL', millilitre: 'mL', millilitres: 'mL',
+  liter: 'L', liters: 'L', litre: 'L', litres: 'L',
+  kiloliter: 'kL', kiloliters: 'kL', megaliter: 'ML', megaliters: 'ML',
+  gigaliter: 'GL', gigaliters: 'GL', teraliter: 'TL', teraliters: 'TL',
+  gallon: 'gal', gallons: 'gal', 'm^3': 'm3', m3: 'm3', cbm: 'm3',
+};
+
+/**
+ * Lowercase inputs whose meaning is genuinely ambiguous. We pick the most
+ * common reading but tell the user what we assumed and what else it could be.
+ * A 10^9 misreading of "mw" is the difference between a nightlight and a city.
+ */
+const AMBIGUOUS_UNITS = {
+  mw: { pick: 'MW', alternatives: ['mW'] },
+  kw: { pick: 'kW', alternatives: [] },
+  gw: { pick: 'GW', alternatives: [] },
+  tw: { pick: 'TW', alternatives: [] },
+  w: { pick: 'W', alternatives: [] },
+  ml: { pick: 'mL', alternatives: ['ML'] },
+  l: { pick: 'L', alternatives: [] },
+  kl: { pick: 'kL', alternatives: [] },
+  gl: { pick: 'GL', alternatives: [] },
+  m: { pick: 'm', alternatives: [] },
+  km: { pick: 'km', alternatives: [] },
+  min: { pick: 'min', alternatives: [] },
+};
+
+/** Convert a value in `unit` to that dimension's base unit. */
+function toBase(value, unit) {
+  const mult = UNIT_MULT[unit];
+  if (mult === undefined) return NaN;
+  return value * mult;
+}
+
+/** Convert a base-unit value into `unit`. */
+function fromBase(value, unit) {
+  const mult = UNIT_MULT[unit];
+  if (mult === undefined) return NaN;
+  return value / mult;
+}
+
+/**
+ * Resolve a raw unit token.
+ * Returns { unitKey, confidence, assumed, alternatives } or null.
+ */
+function resolveUnit(raw) {
+  if (!raw) return null;
+  const token = raw.replace(/μ/g, 'µ').trim();
+
+  // Exact symbol match wins: "mW" is unambiguously milliwatts.
+  if (Object.prototype.hasOwnProperty.call(UNIT_MULT, token)) {
+    return { unitKey: token, confidence: 'high', assumed: false, alternatives: [] };
+  }
+
+  const lower = token.toLowerCase();
+
+  if (Object.prototype.hasOwnProperty.call(AMBIGUOUS_UNITS, lower)) {
+    const { pick, alternatives } = AMBIGUOUS_UNITS[lower];
+    // Only flag as assumed when the casing was actually wrong AND it matters.
+    const assumed = token !== pick && alternatives.length > 0;
+    return {
+      unitKey: pick,
+      confidence: assumed ? 'medium' : 'high',
+      assumed,
+      alternatives,
+    };
+  }
+
+  if (Object.prototype.hasOwnProperty.call(UNIT_WORDS, lower)) {
+    return { unitKey: UNIT_WORDS[lower], confidence: 'high', assumed: false, alternatives: [] };
+  }
+
+  return null;
+}
+
+function unitLabel(unitKey) {
+  const dim = DIMENSION_OF_UNIT[unitKey];
+  if (!dim) return unitKey;
+  const found = UNIT_OPTIONS[dim].find(([k]) => k === unitKey);
+  return found ? found[1] : unitKey;
+}
+
+/* ---- src/lib/format.js ---- */
+/** Human-readable formatting for numbers and magnitudes. */
+
+function formatNum(n) {
+  if (!Number.isFinite(n)) return '—';
+  const abs = Math.abs(n);
+  if (abs === 0) return '0';
+  if (abs >= 1e15 || abs < 1e-4) return n.toExponential(2);
+  if (abs >= 1000) return n.toLocaleString('en-US', { maximumFractionDigits: 0 });
+  if (abs >= 100) return n.toFixed(0);
+  if (abs >= 10) return n.toFixed(1);
+  return n.toFixed(2);
+}
+
+/**
+ * Drop padding zeros: "3.20 m" reads like a specification, "3.2 m" reads like a
+ * representative figure. Applied to ratios and reference values, never to the
+ * user's own input, where their precision is the point.
+ */
+function trimTrailingZeros(text) {
+  return String(text).replace(/(\d)\.(\d*?)0+(?=\D|$)/g, (_, head, tail) => (tail ? `${head}.${tail}` : head));
+}
+
+/** formatNum without decimal padding. */
+function formatCount(n) {
+  return trimTrailingZeros(formatNum(n));
+}
+
+function formatLength(m) {
+  if (!Number.isFinite(m)) return '—';
+  if (m < 1e-6) return `${formatNum(m * 1e9)} nm`;
+  if (m < 1e-3) return `${formatNum(m * 1e6)} µm`;
+  if (m < 1) return `${formatNum(m * 100)} cm`;
+  if (m < 1000) return `${formatNum(m)} m`;
+  return `${formatNum(m / 1000)} km`;
+}
+
+function formatDuration(sec) {
+  if (!Number.isFinite(sec)) return '—';
+  const YEAR = 31536000;
+  if (sec < 1e-6) return `${formatNum(sec * 1e9)} ns`;
+  if (sec < 1e-3) return `${formatNum(sec * 1e6)} µs`;
+  if (sec < 1) return `${formatNum(sec * 1e3)} ms`;
+  if (sec < 60) return `${formatNum(sec)} sec`;
+  if (sec < 3600) return `${formatNum(sec / 60)} min`;
+  if (sec < 86400) return `${formatNum(sec / 3600)} hr`;
+  if (sec < YEAR) return `${formatNum(sec / 86400)} days`;
+  if (sec < YEAR * 1e3) return `${formatNum(sec / YEAR)} yr`;
+  if (sec < YEAR * 1e6) return `${formatNum(sec / (YEAR * 1e3))} thousand yr`;
+  if (sec < YEAR * 1e9) return `${formatNum(sec / (YEAR * 1e6))} million yr`;
+  return `${formatNum(sec / (YEAR * 1e9))} billion yr`;
+}
+
+function formatPower(w) {
+  if (!Number.isFinite(w)) return '—';
+  if (w < 1e-3) return `${formatNum(w * 1e6)} µW`;
+  if (w < 1) return `${formatNum(w * 1e3)} mW`;
+  if (w < 1e3) return `${formatNum(w)} W`;
+  if (w < 1e6) return `${formatNum(w / 1e3)} kW`;
+  if (w < 1e9) return `${formatNum(w / 1e6)} MW`;
+  if (w < 1e12) return `${formatNum(w / 1e9)} GW`;
+  if (w < 1e15) return `${formatNum(w / 1e12)} TW`;
+  return `${w.toExponential(2)} W`;
+}
+
+function formatVolume(l) {
+  if (!Number.isFinite(l)) return '—';
+  if (l < 1e-3) return `${formatNum(l * 1e6)} µL`;
+  if (l < 1) return `${formatNum(l * 1e3)} mL`;
+  if (l < 1e3) return `${formatNum(l)} L`;
+  if (l < 1e6) return `${formatNum(l / 1e3)} thousand L`;
+  if (l < 1e9) return `${formatNum(l / 1e6)} million L`;
+  if (l < 1e12) return `${formatNum(l / 1e9)} billion L`;
+  if (l < 1e15) return `${formatNum(l / 1e12)} trillion L`;
+  return `${l.toExponential(2)} L`;
+}
+
+const FORMATTERS = {
+  length: formatLength,
+  time: formatDuration,
+  power: formatPower,
+  water: formatVolume,
+};
+
+/**
+ * Format a base-unit magnitude for a dimension.
+ * `suffix` appends a flow basis, e.g. " per day", for water flow comparisons.
+ */
+function formatMagnitude(dimension, value, suffix = '') {
+  const fn = FORMATTERS[dimension] || formatNum;
+  return fn(value) + suffix;
+}
+
+/**
+ * Ratio phrasing, always framed as the user's value relative to the reference.
+ * Never produces "one-1.29th of", which is not English.
+ */
+function formatRatio(ratio) {
+  if (!Number.isFinite(ratio) || ratio <= 0) return '—';
+  if (ratio >= 1000 || ratio < 0.001) return `${ratio.toExponential(1)}×`;
+  if (ratio >= 10) return `${formatNum(ratio)}×`;
+  if (ratio >= 1) return `${ratio.toFixed(2)}×`;
+  return `${ratio.toFixed(ratio < 0.01 ? 4 : 3)}×`;
+}
+
+/**
+ * Round to significant figures and drop trailing zeros.
+ * Reference values get 3 significant figures: "3.2 m" is an honest
+ * representative elephant, "3.20 m" reads like an engineering specification.
+ */
+function toSignificant(n, digits = 3) {
+  if (!Number.isFinite(n) || n === 0) return n;
+  return Number(n.toPrecision(digits));
+}
+
+/**
+ * Format a reference's magnitude, marking values that genuinely vary.
+ * The "≈" is doing real work: it says the number is representative, not measured.
+ */
+function formatReference(dimension, ref, suffix = '') {
+  const text = trimTrailingZeros(formatMagnitude(dimension, toSignificant(ref.h), suffix));
+  return ref.approximate ? `≈ ${text}` : text;
+}
+
+/**
+ * How a dimension talks about itself. Keeps comparisons grammatical without
+ * needing a language model: "5× the power of", not "5×".
+ */
+const RELATION = {
+  length: { equal: 'the same size as', scale: 'the size of' },
+  time: { equal: 'exactly as long as', scale: 'the length of' },
+  power: { equal: 'the same power as', scale: 'the power of' },
+  waterVolume: { equal: 'the same volume as', scale: 'the volume of' },
+  waterFlow: { equal: 'the same daily water use as', scale: 'the daily water use of' },
+};
+
+function relationFor(dimension, waterBasis = 'volume') {
+  if (dimension === 'water') return waterBasis === 'flow' ? RELATION.waterFlow : RELATION.waterVolume;
+  return RELATION[dimension] || { equal: 'the same as', scale: '' };
+}
+
+/**
+ * A complete comparative clause, ready to drop after "is".
+ *   comparisonPhrase(5, ref, 'power')
+ *     -> "about 5× the power of a typical hyperscale data centre"
+ * Uses the reference's `phrase` field, which carries its article.
+ */
+function comparisonPhrase(ratio, ref, dimension, waterBasis = 'volume') {
+  const name = ref.phrase || ref.name;
+  const { equal, scale } = relationFor(dimension, waterBasis);
+  const withScale = scale ? `${scale} ${name}` : name;
+
+  if (!Number.isFinite(ratio) || ratio <= 0) return `not meaningfully comparable with ${name}`;
+  if (ratio >= 0.98 && ratio <= 1.02) return `almost exactly ${equal} ${name}`;
+  if (ratio > 1.02) return `about ${formatCount(ratio)}× ${withScale}`;
+  if (ratio >= 0.1) return `about ${Math.round(ratio * 100)}% of ${withScale}`;
+  return `about 1/${formatCount(Math.round(1 / ratio))} of ${withScale}`;
+}
+
+/* ---- src/data/references.js ---- */
+/**
+ * BENCH reference database.
+ *
+ * Required fields
+ *   id        stable slug: colours, presets, and share links key off this
+ *   name      display name, shown in charts and lists
+ *   phrase    the same thing as it appears mid-sentence, with its article
+ *             ("the Eiffel Tower", "an average human", "Mount Everest").
+ *             Explicit rather than derived: English articles do not follow a
+ *             rule that survives proper nouns.
+ *   h         magnitude in the dimension's base unit (m / sec / W / L)
+ *   icon      display glyph
+ *   shape     silhouette primitive
+ *
+ * Optional fields
+ *   aliases     extra search terms people actually type ("plane", "jumbo jet")
+ *   quality     1-5, how intuitive this reference is; nudges ranking
+ *   approximate true when the real value varies enough that a precise figure
+ *               would overclaim. Renders as "≈ 1.7 m".
+ *   qualifier   caveat shown wherever the reference appears
+ *   source      structured citation, see SOURCES below
+ *   basis       WATER ONLY. 'volume' for a fixed amount, or { perSeconds: n }
+ *               for a flow. Volumes and flows are never ranked together.
+ */
+
+const V = 'volume';
+const PER_DAY = { perSeconds: 86400 };
+const PER_YEAR = { perSeconds: 31536000 };
+const PER_SEC = { perSeconds: 1 };
+
+/** Structured so a source sheet can be rendered later without touching the data. */
+const SOURCES = {
+  crsDataCentres: {
+    title: 'Data Centers and Electricity Demand',
+    publisher: 'Congressional Research Service',
+    year: 2026,
+    url: 'https://www.congress.gov/crs-product/R48646',
+    accessed: '2026-08-14',
+  },
+  iaeiDataCentres: {
+    title: 'Powering the Data Center Boom',
+    publisher: 'IAEI Magazine',
+    year: 2026,
+    accessed: '2026-08-14',
+  },
+  hanwhaRacks: {
+    title: 'Rack Density in AI Data Centers',
+    publisher: 'Hanwha Data Centers, citing McKinsey',
+    year: 2026,
+    accessed: '2026-08-14',
+  },
+  eesiWater: {
+    title: 'Data Centers and Water Consumption',
+    publisher: 'Environmental and Energy Study Institute',
+    year: 2026,
+    accessed: '2026-08-14',
+  },
+  natureForwardWater: {
+    title: 'Data Centers and Regional Water Use',
+    publisher: 'Nature Forward',
+    year: 2026,
+    accessed: '2026-08-14',
+  },
+  lincolnLandUse: {
+    title: 'Land and Power: Data Center Siting',
+    publisher: 'Lincoln Institute of Land Policy',
+    year: 2026,
+    accessed: '2026-08-14',
+  },
+};
+
+const REFERENCES = {
+  length: {
+    explorer: [
+      { id: 'human', name: 'Average human', phrase: 'an average human', h: 1.7, icon: '🧍', shape: 'human', quality: 5, approximate: true, aliases: ['person', 'people', 'man', 'woman', 'body', 'adult'] },
+      { id: 'container', name: 'Shipping container', phrase: 'a shipping container', h: 2.6, icon: '📦', shape: 'block', aliases: ['freight', 'cargo', 'box'] },
+      { id: 'hoop', name: 'Basketball hoop', phrase: 'a basketball hoop', h: 3.05, icon: '🏀', shape: 'pole', aliases: ['net', 'rim', 'court', 'sport'] },
+      { id: 'elephant', name: 'African elephant', phrase: 'an African elephant', h: 3.2, icon: '🐘', shape: 'quad', approximate: true, aliases: ['animal', 'mammal'] },
+      { id: 'doubledecker', name: 'London double-decker bus', phrase: 'a London double-decker bus', h: 4.4, icon: '🚍', shape: 'block', approximate: true, aliases: ['bus', 'routemaster', 'vehicle'] },
+      { id: 'giraffe', name: 'Giraffe', phrase: 'a giraffe', h: 5.5, icon: '🦒', shape: 'quad', approximate: true, aliases: ['animal', 'tall'] },
+      { id: 'schoolbus', name: 'School bus', phrase: 'a school bus', h: 12, icon: '🚌', shape: 'block', approximate: true, aliases: ['bus', 'vehicle'] },
+      { id: 'trex', name: 'T. rex (length)', phrase: 'a T. rex', h: 12, icon: '🦖', shape: 'biped', approximate: true, aliases: ['dinosaur', 'tyrannosaurus', 'rex'] },
+      { id: 'utilitypole', name: 'Utility pole', phrase: 'a utility pole', h: 12, icon: '🪵', shape: 'pole', approximate: true, aliases: ['telephone pole', 'power line', 'post'] },
+      { id: 'bluewhale', name: 'Blue whale (length)', phrase: 'a blue whale', h: 24, icon: '🐋', shape: 'ship', quality: 4, approximate: true, aliases: ['whale', 'animal', 'ocean', 'sea'] },
+      { id: 'b747', name: 'Boeing 747 (length)', phrase: 'a Boeing 747', h: 70, icon: '✈️', shape: 'aircraft', aliases: ['plane', 'airplane', 'aeroplane', 'aircraft', 'jumbo jet', 'jet', 'flight'] },
+      { id: 'sequoia', name: 'Sequoia tree', phrase: 'a sequoia tree', h: 83, icon: '🌲', shape: 'tree', approximate: true, aliases: ['tree', 'redwood', 'forest'] },
+      { id: 'liberty', name: 'Statue of Liberty', phrase: 'the Statue of Liberty', h: 93, icon: '🗽', shape: 'human', quality: 4, aliases: ['statue', 'new york', 'landmark', 'monument'] },
+      { id: 'bigben', name: 'Big Ben (tower)', phrase: 'Big Ben', h: 96, icon: '🏛️', shape: 'lattice', aliases: ['tower', 'clock', 'london', 'landmark', 'westminster'] },
+      { id: 'iss', name: 'International Space Station (length)', phrase: 'the International Space Station', h: 109, icon: '🛰️', shape: 'lattice', aliases: ['iss', 'space station', 'satellite', 'space', 'orbit'] },
+      { id: 'saturnv', name: 'Saturn V rocket', phrase: 'a Saturn V rocket', h: 110, icon: '🚀', shape: 'rocket', aliases: ['rocket', 'apollo', 'nasa', 'space', 'launch'] },
+      { id: 'football', name: 'Football field (length)', phrase: 'a football field', h: 110, icon: '🏟️', shape: 'block', quality: 4, aliases: ['field', 'pitch', 'stadium', 'soccer', 'sport'] },
+      { id: 'goldengate', name: 'Golden Gate Bridge (towers)', phrase: 'the Golden Gate Bridge towers', h: 227, icon: '🌉', shape: 'lattice', aliases: ['bridge', 'tower', 'san francisco', 'landmark'] },
+      { id: 'titanic', name: 'Titanic (length)', phrase: 'the Titanic', h: 269, icon: '🚢', shape: 'ship', aliases: ['ship', 'boat', 'ocean liner', 'vessel'] },
+      { id: 'eiffel', name: 'Eiffel Tower', phrase: 'the Eiffel Tower', h: 330, icon: '🗼', shape: 'lattice', quality: 5, aliases: ['tower', 'paris', 'france', 'landmark', 'monument'] },
+      { id: 'empirestate', name: 'Empire State Building', phrase: 'the Empire State Building', h: 381, icon: '🏙️', shape: 'block', quality: 4, aliases: ['skyscraper', 'building', 'new york', 'tower', 'landmark'] },
+      { id: 'burj', name: 'Burj Khalifa', phrase: 'the Burj Khalifa', h: 828, icon: '🏗️', shape: 'block', quality: 4, aliases: ['skyscraper', 'building', 'dubai', 'tower', 'tallest'] },
+      { id: 'everest', name: 'Mount Everest', phrase: 'Mount Everest', h: 8849, icon: '🏔️', shape: 'mountain', quality: 5, aliases: ['mountain', 'peak', 'himalaya', 'tallest'] },
+    ],
+    geek: [
+      { id: 'hulk', name: 'Hulk (comics average)', phrase: 'the Hulk', h: 2.4, icon: '💪', shape: 'human', approximate: true, aliases: ['marvel', 'superhero', 'comic'] },
+      { id: 'optimus', name: 'Optimus Prime (film)', phrase: 'Optimus Prime', h: 10, icon: '🚛', shape: 'robot', approximate: true, aliases: ['transformer', 'robot', 'mech'] },
+      { id: 'libertyprime', name: 'Liberty Prime', phrase: 'Liberty Prime', h: 12, icon: '🗿', shape: 'robot', approximate: true, aliases: ['fallout', 'robot', 'mech', 'game'] },
+      { id: 'irongiant', name: 'Iron Giant', phrase: 'the Iron Giant', h: 15, icon: '🤖', shape: 'robot', approximate: true, aliases: ['robot', 'mech', 'film'] },
+      { id: 'attacktitan', name: 'Attack Titan', phrase: 'the Attack Titan', h: 15, icon: '👣', shape: 'biped', aliases: ['aot', 'anime', 'titan', 'eren'] },
+      { id: 'gundam', name: 'RX-78-2 Gundam', phrase: 'a Gundam', h: 18, icon: '🦾', shape: 'robot', aliases: ['gundam', 'mecha', 'mech', 'robot', 'anime'] },
+      { id: 'eva01', name: 'Evangelion Unit-01', phrase: 'Evangelion Unit-01', h: 40, icon: '🤖', shape: 'robot', approximate: true, aliases: ['eva', 'evangelion', 'mecha', 'mech', 'anime'] },
+      { id: 'godzillaminus', name: 'Godzilla (Minus One)', phrase: 'Godzilla in Minus One', h: 50, icon: '🦕', shape: 'biped', aliases: ['godzilla', 'kaiju', 'monster', 'film'] },
+      { id: 'colossaltitan', name: 'Colossal Titan', phrase: 'the Colossal Titan', h: 60, icon: '🧱', shape: 'biped', aliases: ['aot', 'anime', 'titan'] },
+      { id: 'voltron', name: 'Voltron (combined)', phrase: 'Voltron', h: 60, icon: '🦁', shape: 'robot', approximate: true, aliases: ['mecha', 'mech', 'robot', 'anime'] },
+      { id: 'jaeger', name: 'Pacific Rim Jaeger (average)', phrase: 'a Jaeger', h: 80, icon: '🛡️', shape: 'robot', approximate: true, aliases: ['pacific rim', 'mecha', 'mech', 'robot'] },
+      { id: 'kaiju', name: 'Kaiju (Pacific Rim, average)', phrase: 'a Pacific Rim kaiju', h: 100, icon: '👹', shape: 'biped', approximate: true, aliases: ['kaiju', 'monster', 'pacific rim'] },
+      { id: 'kong', name: 'King Kong (2021)', phrase: 'King Kong', h: 102, icon: '🦍', shape: 'biped', aliases: ['kong', 'ape', 'gorilla', 'monster', 'film'] },
+      { id: 'godzilla2014', name: 'Godzilla (2014 film)', phrase: 'Godzilla in the 2014 film', h: 106, icon: '🦖', shape: 'biped', aliases: ['godzilla', 'kaiju', 'monster', 'film'] },
+      { id: 'stardestroyer', name: 'Star Destroyer (length)', phrase: 'a Star Destroyer', h: 1600, icon: '🛸', shape: 'wedge', approximate: true, aliases: ['star wars', 'spaceship', 'ship', 'imperial'] },
+      {
+        id: 'deathstar', name: 'Death Star (diameter)', phrase: 'the Death Star', h: 160000, icon: '🌑', shape: 'sphere',
+        approximate: true, aliases: ['star wars', 'space station', 'moon'],
+        qualifier: 'Fictional order-of-magnitude figure, not an engineering spec.',
+      },
+    ],
+  },
+
+  time: {
+    explorer: [
+      { id: 'blink', name: 'Blink of an eye', phrase: 'a blink of an eye', h: 0.1, icon: '👁️', shape: 'pole', approximate: true, aliases: ['blink', 'instant', 'moment'] },
+      { id: 'heartbeat', name: 'Human heartbeat', phrase: 'a human heartbeat', h: 0.8, icon: '💓', shape: 'pole', quality: 4, approximate: true, aliases: ['heart', 'pulse', 'beat'] },
+      { id: 'sneeze', name: 'A sneeze', phrase: 'a sneeze', h: 1, icon: '🤧', shape: 'pole', approximate: true, aliases: ['sneeze', 'moment'] },
+      { id: 'sprint', name: '100 m sprint (Olympic)', phrase: 'an Olympic 100 m sprint', h: 9.6, icon: '🏃', shape: 'pole', aliases: ['race', 'run', 'olympics', 'sport'] },
+      { id: 'popcorn', name: 'Microwaving popcorn', phrase: 'microwaving popcorn', h: 180, icon: '🍿', shape: 'block', approximate: true, aliases: ['popcorn', 'microwave', 'cooking'] },
+      { id: 'eclipse', name: 'Total solar eclipse (totality)', phrase: 'the totality of a solar eclipse', h: 240, icon: '🌑', shape: 'pole', approximate: true, aliases: ['eclipse', 'sun', 'astronomy'] },
+      { id: 'movie', name: 'Average movie', phrase: 'an average movie', h: 7200, icon: '🎬', shape: 'block', quality: 5, approximate: true, aliases: ['film', 'movie', 'cinema'] },
+      { id: 'marathon', name: 'Marathon (average finish)', phrase: 'an average marathon finish', h: 15300, icon: '🏅', shape: 'block', approximate: true, aliases: ['run', 'race', 'running', 'sport'] },
+      { id: 'schoolday', name: 'School day', phrase: 'a school day', h: 21600, icon: '🏫', shape: 'block', approximate: true, aliases: ['school', 'class', 'education'] },
+      { id: 'sleep', name: "A night's sleep", phrase: "a night's sleep", h: 28800, icon: '😴', shape: 'human', quality: 4, approximate: true, aliases: ['sleep', 'night', 'rest'] },
+      { id: 'day', name: 'One full day', phrase: 'a full day', h: 86400, icon: '☀️', shape: 'block', quality: 5, aliases: ['day', '24 hours'] },
+      { id: 'workweek', name: 'Work week', phrase: 'a work week', h: 604800, icon: '💼', shape: 'block', aliases: ['week', 'work', 'job'] },
+      { id: 'pregnancy', name: 'Human pregnancy', phrase: 'a human pregnancy', h: 23328000, icon: '🤰', shape: 'human', quality: 4, approximate: true, aliases: ['pregnancy', 'baby', 'birth', 'gestation'] },
+      { id: 'year', name: "Earth's orbit (1 year)", phrase: "Earth's orbit around the Sun", h: 31536000, icon: '🌎', shape: 'block', quality: 5, aliases: ['year', 'orbit', 'earth', 'sun'] },
+      { id: 'lifetime', name: 'Human lifetime (average)', phrase: 'an average human lifetime', h: 2522880000, icon: '🧓', shape: 'human', quality: 5, approximate: true, aliases: ['life', 'lifespan', 'lifetime', 'age'] },
+      { id: 'redwood', name: 'Redwood tree lifespan', phrase: 'a redwood tree lifespan', h: 94608000000, icon: '🌲', shape: 'tree', approximate: true, aliases: ['tree', 'redwood', 'sequoia', 'forest'] },
+      { id: 'pyramid', name: "Great Pyramid's age", phrase: 'the age of the Great Pyramid', h: 141912000000, icon: '🔺', shape: 'mountain', approximate: true, aliases: ['pyramid', 'egypt', 'ancient', 'history'] },
+      { id: 'sapiens', name: 'Homo sapiens so far', phrase: 'the existence of Homo sapiens so far', h: 9461000000000, icon: '🧬', shape: 'mountain', approximate: true, aliases: ['human', 'evolution', 'species', 'prehistory'] },
+      { id: 'dinos', name: 'Since the dinosaur extinction', phrase: 'the time since the dinosaurs died out', h: 2082000000000000, icon: '🦕', shape: 'mountain', approximate: true, aliases: ['dinosaur', 'extinction', 'cretaceous'] },
+      { id: 'earthage', name: 'Age of Earth', phrase: 'the age of the Earth', h: 141912000000000000, icon: '🌍', shape: 'sphere', quality: 4, approximate: true, aliases: ['earth', 'planet', 'geology'] },
+      { id: 'universeage', name: 'Age of the universe', phrase: 'the age of the universe', h: 435348000000000000, icon: '🌌', shape: 'sphere', quality: 5, approximate: true, aliases: ['universe', 'cosmos', 'big bang', 'space'] },
+    ],
+    geek: [
+      { id: 'respawn', name: 'Video game respawn timer', phrase: 'a video game respawn timer', h: 10, icon: '🎮', shape: 'pole', approximate: true, aliases: ['game', 'gaming', 'respawn'] },
+      { id: 'lotr', name: 'LOTR trilogy (extended cut)', phrase: 'the extended Lord of the Rings trilogy', h: 41040, icon: '💍', shape: 'block', aliases: ['lord of the rings', 'tolkien', 'film', 'movie'] },
+      { id: 'groundhog', name: 'Groundhog Day loop', phrase: 'one Groundhog Day loop', h: 86400, icon: '🔁', shape: 'block', aliases: ['groundhog', 'time loop', 'film'] },
+      { id: 'regeneration', name: "A Doctor's tenure (average)", phrase: "an average Doctor's tenure", h: 94608000, icon: '📺', shape: 'human', approximate: true, aliases: ['doctor who', 'tardis', 'tv'] },
+      {
+        id: 'miller', name: "One hour on Miller's planet", phrase: "one hour on Miller's planet", h: 220752000, icon: '🪐', shape: 'sphere',
+        aliases: ['interstellar', 'time dilation', 'relativity', 'film'],
+        qualifier: 'Time dilation as depicted in Interstellar: one hour there is about seven years on Earth.',
+      },
+      { id: 'thirdage', name: "Middle-earth's Third Age", phrase: "Middle-earth's Third Age", h: 95306184000, icon: '🗝️', shape: 'tree', aliases: ['tolkien', 'lord of the rings', 'fantasy'] },
+    ],
+  },
+
+  power: {
+    explorer: [
+      { id: 'led', name: 'LED light bulb', phrase: 'an LED light bulb', h: 10, icon: '💡', shape: 'pole', quality: 5, approximate: true, aliases: ['bulb', 'lamp', 'light', 'lighting'] },
+      { id: 'laptop', name: 'Laptop charger', phrase: 'a laptop charger', h: 65, icon: '💻', shape: 'pole', quality: 4, approximate: true, aliases: ['laptop', 'computer', 'charger', 'usb'] },
+      { id: 'microwave', name: 'Microwave oven', phrase: 'a microwave oven', h: 1100, icon: '🍽️', shape: 'block', quality: 4, approximate: true, aliases: ['microwave', 'kitchen', 'appliance'] },
+      { id: 'hairdryer', name: 'Hair dryer', phrase: 'a hair dryer', h: 1800, icon: '💨', shape: 'pole', approximate: true, aliases: ['hairdryer', 'appliance', 'bathroom'] },
+      {
+        id: 'home', name: 'Average home (peak draw)', phrase: 'an average home at peak draw', h: 3000, icon: '🏠', shape: 'block', quality: 5,
+        approximate: true, aliases: ['house', 'home', 'household', 'domestic'],
+        qualifier: 'Peak demand, not typical continuous usage.',
+      },
+      {
+        id: 'evcharger', name: 'EV fast charger', phrase: 'an EV fast charger', h: 150000, icon: '🔌', shape: 'block',
+        approximate: true, aliases: ['ev', 'electric car', 'charger', 'tesla', 'vehicle'],
+        qualifier: 'Peak charging rate, not continuous draw.',
+      },
+      {
+        id: 'gpurack', name: 'AI GPU server rack (dense)', phrase: 'a dense AI GPU server rack', h: 50000, icon: '🖥️', shape: 'block',
+        approximate: true, aliases: ['gpu', 'server', 'rack', 'ai', 'nvidia', 'compute'],
+        source: SOURCES.hanwhaRacks,
+      },
+      { id: 'windturbine', name: 'Small wind turbine', phrase: 'a small wind turbine', h: 100000, icon: '🌬️', shape: 'lattice', approximate: true, aliases: ['wind', 'turbine', 'renewable', 'energy'] },
+      {
+        id: 'edgedc', name: 'Edge data centre', phrase: 'an edge data centre', h: 1000000, icon: '🗄️', shape: 'block',
+        approximate: true, aliases: ['data center', 'data centre', 'edge', 'server'],
+        source: SOURCES.iaeiDataCentres,
+        qualifier: 'Edge facilities range from roughly 50 kW to 2 MW.',
+      },
+      { id: 'solarfarm', name: 'Mid-size solar farm', phrase: 'a mid-size solar farm', h: 20000000, icon: '☀️', shape: 'block', approximate: true, aliases: ['solar', 'renewable', 'energy', 'panel'] },
+      {
+        id: 'hyperscale', name: 'Typical hyperscale data centre', phrase: 'a typical hyperscale data centre', h: 100000000, icon: '🏢', shape: 'block', quality: 5,
+        approximate: true, aliases: ['data center', 'data centre', 'hyperscale', 'cloud', 'ai', 'server'],
+        source: SOURCES.crsDataCentres,
+      },
+      {
+        id: 'largesthyperscale', name: 'Largest hyperscale facilities today', phrase: 'the largest hyperscale facilities operating today', h: 650000000, icon: '🌐', shape: 'sphere',
+        approximate: true, aliases: ['data center', 'data centre', 'hyperscale', 'largest'],
+        source: SOURCES.iaeiDataCentres,
+      },
+      { id: 'nuclear', name: 'Nuclear power plant (1 reactor)', phrase: 'a single nuclear reactor', h: 1000000000, icon: '☢️', shape: 'block', quality: 5, approximate: true, aliases: ['nuclear', 'reactor', 'power plant', 'fission'] },
+      { id: 'hoover', name: 'Hoover Dam (max output)', phrase: 'the Hoover Dam at maximum output', h: 2080000000, icon: '🌊', shape: 'mountain', quality: 4, aliases: ['dam', 'hydro', 'hydroelectric', 'nevada'] },
+      {
+        id: 'hyperion', name: 'Meta Hyperion campus (in development)', phrase: "Meta's Hyperion campus", h: 5000000000, icon: '🏗️', shape: 'block',
+        approximate: true, aliases: ['meta', 'facebook', 'data center', 'data centre', 'louisiana'],
+        source: SOURCES.lincolnLandUse,
+        qualifier: 'Planned build-out figure, not current draw.',
+      },
+      { id: 'nyc', name: 'New York City (average demand)', phrase: 'New York City', h: 6000000000, icon: '🏙️', shape: 'block', quality: 4, approximate: true, aliases: ['city', 'nyc', 'new york', 'urban', 'grid'] },
+      { id: 'threegorges', name: 'Three Gorges Dam', phrase: 'the Three Gorges Dam', h: 22500000000, icon: '🏞️', shape: 'mountain', aliases: ['dam', 'hydro', 'china', 'largest'] },
+      { id: 'usgrid', name: 'Total US generating capacity', phrase: 'the entire US generating capacity', h: 1200000000000, icon: '🇺🇸', shape: 'sphere', approximate: true, aliases: ['usa', 'america', 'grid', 'country', 'national'] },
+      { id: 'worldgrid', name: 'Total world generating capacity', phrase: 'the entire world generating capacity', h: 9000000000000, icon: '🌍', shape: 'sphere', quality: 4, approximate: true, aliases: ['world', 'global', 'grid', 'planet'] },
+    ],
+    geek: [
+      { id: 'supercomputer', name: 'Top supercomputer (draw)', phrase: 'a top supercomputer', h: 21000000, icon: '🖥️', shape: 'block', approximate: true, aliases: ['supercomputer', 'hpc', 'compute', 'exascale'] },
+      {
+        id: 'lightning', name: 'Lightning bolt (peak)', phrase: 'a lightning bolt at peak', h: 1000000000, icon: '⚡', shape: 'pole',
+        approximate: true, aliases: ['lightning', 'storm', 'thunder', 'weather'],
+        qualifier: 'Peak instantaneous power lasting a fraction of a second, not sustained output.',
+      },
+      { id: 'bitcoin', name: 'Global Bitcoin network', phrase: 'the global Bitcoin network', h: 15000000000, icon: '🪙', shape: 'block', approximate: true, aliases: ['bitcoin', 'crypto', 'mining', 'blockchain'] },
+      {
+        id: 'superlaser', name: 'Death Star superlaser', phrase: 'the Death Star superlaser', h: 2.4e32, icon: '🌌', shape: 'sphere',
+        approximate: true, aliases: ['star wars', 'laser', 'death star'],
+        qualifier: 'Fictional order-of-magnitude estimate from pop-science discussion, not an official figure.',
+      },
+    ],
+  },
+
+  water: {
+    explorer: [
+      { id: 'sip', name: 'A sip of water', phrase: 'a sip of water', h: 0.03, icon: '🥤', shape: 'pole', basis: V, approximate: true, aliases: ['sip', 'drink', 'mouthful'] },
+      { id: 'glass', name: 'A glass of water', phrase: 'a glass of water', h: 0.25, icon: '🥛', shape: 'pole', basis: V, quality: 5, approximate: true, aliases: ['glass', 'cup', 'drink'] },
+      { id: 'flush', name: 'Toilet flush', phrase: 'a toilet flush', h: 6, icon: '🚽', shape: 'pole', basis: V, quality: 4, approximate: true, aliases: ['toilet', 'flush', 'bathroom'] },
+      { id: 'washer', name: 'Washing machine load', phrase: 'a washing machine load', h: 50, icon: '🧺', shape: 'block', basis: V, approximate: true, aliases: ['laundry', 'washing machine', 'appliance'] },
+      { id: 'shower', name: '5-minute shower', phrase: 'a five-minute shower', h: 65, icon: '🚿', shape: 'block', basis: V, quality: 5, approximate: true, aliases: ['shower', 'bathroom', 'washing'] },
+      { id: 'bathtub', name: 'Bathtub, full', phrase: 'a full bathtub', h: 150, icon: '🛁', shape: 'block', basis: V, quality: 4, approximate: true, aliases: ['bath', 'bathtub', 'tub', 'bathroom'] },
+      { id: 'backyardpool', name: 'Backyard swimming pool', phrase: 'a backyard swimming pool', h: 50000, icon: '🏊', shape: 'block', basis: V, approximate: true, aliases: ['pool', 'swimming', 'garden'] },
+      { id: 'olympicpool', name: 'Olympic swimming pool', phrase: 'an Olympic swimming pool', h: 2500000, icon: '🏊‍♂️', shape: 'block', basis: V, quality: 5, aliases: ['pool', 'swimming', 'olympics', 'sport'] },
+      {
+        id: 'hurricane', name: 'Hurricane rainfall over a city', phrase: 'the rainfall a hurricane drops on a city', h: 34000000000000, icon: '🌀', shape: 'mountain',
+        basis: V, approximate: true, aliases: ['hurricane', 'storm', 'rain', 'weather', 'flood'],
+        qualifier: 'Approximate total rainfall from a single storm event.',
+      },
+      { id: 'baikal', name: 'Lake Baikal', phrase: 'Lake Baikal', h: 23600000000000000, icon: '🏞️', shape: 'sphere', basis: V, approximate: true, aliases: ['lake', 'baikal', 'russia', 'freshwater'] },
+      { id: 'oceans', name: 'All oceans on Earth', phrase: 'every ocean on Earth', h: 1.386e21, icon: '🌊', shape: 'sphere', basis: V, quality: 4, approximate: true, aliases: ['ocean', 'sea', 'earth', 'global'] },
+
+      {
+        id: 'persondaily', name: "One person's water use", phrase: "one person's daily water use", h: 300, icon: '🧍', shape: 'human',
+        basis: PER_DAY, quality: 5, approximate: true, aliases: ['person', 'household', 'domestic', 'daily'],
+      },
+      {
+        id: 'dcdaily', name: 'Mid-size data centre', phrase: 'a mid-size data centre', h: 1514164, icon: '🖥️', shape: 'block',
+        basis: PER_DAY, approximate: true, aliases: ['data center', 'data centre', 'server', 'cooling'],
+        source: SOURCES.eesiWater,
+        qualifier: 'Reported figures span roughly 300,000 to 500,000 gallons a day.',
+      },
+      {
+        id: 'hyperscaledaily', name: 'Hyperscale data centre (high end)', phrase: 'a hyperscale data centre at the high end', h: 18927050, icon: '🏢', shape: 'block',
+        basis: PER_DAY, approximate: true, aliases: ['data center', 'data centre', 'hyperscale', 'cooling', 'ai'],
+        source: SOURCES.natureForwardWater,
+        qualifier: 'The top of the reported range, around 5 million gallons a day.',
+      },
+      { id: 'towndaily', name: 'Small town', phrase: 'a small town', h: 40000000, icon: '🏘️', shape: 'mountain', basis: PER_DAY, approximate: true, aliases: ['town', 'municipal', 'community', 'reservoir'] },
+      {
+        id: 'novahub', name: 'Northern Virginia data centre hub', phrase: 'the Northern Virginia data centre hub', h: 7570820000, icon: '🏙️', shape: 'mountain',
+        basis: PER_YEAR, approximate: true, aliases: ['virginia', 'data center', 'data centre', 'ashburn', 'cluster'],
+        source: SOURCES.natureForwardWater,
+        qualifier: 'Based on 2023 figures of roughly 2 billion gallons a year.',
+      },
+      { id: 'coloradoriver', name: 'Colorado River', phrase: 'the Colorado River', h: 18500000000000, icon: '🏜️', shape: 'mountain', basis: PER_YEAR, approximate: true, aliases: ['river', 'colorado', 'flow', 'drought'] },
+      { id: 'worldwater', name: 'World fresh water use', phrase: 'the whole world', h: 12000000000000, icon: '🌍', shape: 'sphere', basis: PER_DAY, quality: 4, approximate: true, aliases: ['world', 'global', 'freshwater', 'planet'] },
+    ],
+    geek: [
+      { id: 'amazonriver', name: 'Amazon River', phrase: 'the Amazon River', h: 209000000, icon: '🌊', shape: 'mountain', basis: PER_SEC, approximate: true, aliases: ['river', 'amazon', 'brazil', 'flow'] },
+      { id: 'niagara', name: 'Niagara Falls', phrase: 'Niagara Falls', h: 2400000, icon: '💦', shape: 'mountain', basis: PER_SEC, approximate: true, aliases: ['waterfall', 'niagara', 'falls', 'flow'] },
+    ],
+  },
+};
+
+const DIMENSIONS = ['length', 'time', 'power', 'water'];
+
+const DIMENSION_META = {
+  length: { label: 'Length', icon: '📏', baseUnit: 'm', youLabel: 'Your measurement' },
+  time: { label: 'Time', icon: '⏱', baseUnit: 'sec', youLabel: 'Your duration' },
+  power: { label: 'Power', icon: '⚡', baseUnit: 'W', youLabel: 'Your power figure' },
+  water: { label: 'Water', icon: '💧', baseUnit: 'L', youLabel: 'Your water figure' },
+};
+
+/** Flat index of every reference, for search and validation. */
+const ALL_REFERENCES = DIMENSIONS.flatMap((dim) =>
+  ['explorer', 'geek'].flatMap((cat) =>
+    REFERENCES[dim][cat].map((ref) => ({ ...ref, dimension: dim, category: cat }))
+  )
+);
+
+/**
+ * Dataset sanity check. The test suite runs it, and main.js runs it again in
+ * development, so a bad edit surfaces the moment the page loads rather than
+ * when a chart renders nonsense.
+ * Returns an array of problem strings; empty means healthy.
+ */
+function validateReferences(refs = ALL_REFERENCES) {
+  const problems = [];
+  const ids = new Set();
+
+  for (const ref of refs) {
+    const label = ref.id || ref.name || '(unnamed)';
+    if (!ref.id) problems.push(`Missing id: ${ref.name || '(unnamed)'}`);
+    else if (ids.has(ref.id)) problems.push(`Duplicate id: ${ref.id}`);
+    ids.add(ref.id);
+
+    if (!ref.name) problems.push(`Missing name: ${label}`);
+    if (!ref.phrase) problems.push(`Missing sentence phrase: ${label}`);
+    if (!ref.icon) problems.push(`Missing icon: ${label}`);
+    if (!ref.shape) problems.push(`Missing shape: ${label}`);
+    if (!Number.isFinite(ref.h) || ref.h <= 0) problems.push(`Bad magnitude: ${label}`);
+    if (ref.quality !== undefined && (ref.quality < 1 || ref.quality > 5)) {
+      problems.push(`Quality out of range: ${label}`);
+    }
+    if (ref.aliases && !Array.isArray(ref.aliases)) problems.push(`Aliases must be an array: ${label}`);
+    if (ref.source && typeof ref.source !== 'object') problems.push(`Source must be structured: ${label}`);
+    if (ref.source && (!ref.source.title || !ref.source.publisher)) {
+      problems.push(`Source needs a title and publisher: ${label}`);
+    }
+    if (ref.dimension === 'water') {
+      const validBasis = ref.basis === 'volume' || (ref.basis && ref.basis.perSeconds > 0);
+      if (!validBasis) problems.push(`Water reference missing basis: ${label}`);
+    }
+  }
+
+  return problems;
+}
+
+/** Render a structured source as a single citation line. */
+function formatSource(source) {
+  if (!source) return '';
+  if (typeof source === 'string') return source;
+  return [source.title, source.publisher, source.year].filter(Boolean).join(', ');
+}
+
+/* ---- src/lib/scoring.js ---- */
+/** Ranking, direct-match detection, search, and comparison-pool selection. */
+
+
+
+const DAY_SECONDS = 86400;
+
+/**
+ * The set of references a value may honestly be compared against.
+ *
+ * For water this matters: a swimming pool is a fixed volume and a data centre's
+ * consumption is a rate. Ranking them in the same chart is a false claim, so
+ * they live in separate pools. Rates are normalised to litres per day.
+ */
+function getPool(dimension, category, waterBasis = 'volume') {
+  const primary = REFERENCES[dimension][category] || [];
+  const fallback = REFERENCES[dimension].explorer || [];
+
+  if (dimension !== 'water') {
+    return primary.map((ref) => ({ ...ref }));
+  }
+
+  const wantsFlow = waterBasis === 'flow';
+  const normalise = (ref) => {
+    if (!wantsFlow) return { ...ref };
+    return { ...ref, h: ref.h * (DAY_SECONDS / ref.basis.perSeconds), rawH: ref.h };
+  };
+  const matches = (ref) =>
+    wantsFlow ? Boolean(ref.basis && ref.basis.perSeconds) : ref.basis === 'volume';
+
+  let pool = primary.filter(matches).map(normalise);
+  if (pool.length < 3) {
+    const seen = new Set(pool.map((r) => r.id));
+    pool = pool.concat(fallback.filter((r) => matches(r) && !seen.has(r.id)).map(normalise));
+  }
+  return pool;
+}
+
+/**
+ * Ranking score. Lower is better.
+ * Distance in orders of magnitude, with bonuses for ratios humans reason well
+ * about and for references most people already have a feel for.
+ */
+function scoreComparison(value, ref) {
+  if (!(value > 0) || !(ref.h > 0)) return Infinity;
+  const ratio = value / ref.h;
+  let score = Math.abs(Math.log10(ratio));
+  if (ratio >= 0.75 && ratio <= 1.33) score -= 0.5;
+  else if (ratio >= 1.8 && ratio <= 12) score -= 0.25;
+  else if (ratio >= 0.08 && ratio <= 0.55) score -= 0.2;
+  if (ref.quality) score -= ref.quality * 0.05;
+  return score;
+}
+
+function computeUseful(value, pool, n) {
+  if (!(value > 0)) return [];
+  return pool
+    .map((ref) => ({ ...ref, score: scoreComparison(value, ref) }))
+    .sort((a, b) => a.score - b.score)
+    .slice(0, n);
+}
+
+function computeNearest(value, pool, n) {
+  if (!(value > 0)) return [];
+  return pool
+    .map((ref) => ({ ...ref, distance: Math.abs(Math.log10(value / ref.h)) }))
+    .sort((a, b) => a.distance - b.distance)
+    .slice(0, n);
+}
+
+const MATCH_EXACT_TOLERANCE = 0.02;
+const MATCH_NEAR_TOLERANCE = 0.1;
+
+/**
+ * Find a reference that directly matches the value.
+ * Returns { ref, ratio, tier } where tier is 'exact' or 'near', or null.
+ *
+ * Searches the whole dimension rather than only the active category, so an
+ * Explorer-mode user still learns that their number is exactly a Gundam.
+ */
+function findDirectMatch(value, dimension, waterBasis = 'volume') {
+  if (!(value > 0)) return null;
+
+  const candidates = ['explorer', 'geek'].flatMap((cat) => getPool(dimension, cat, waterBasis));
+  let best = null;
+
+  for (const ref of candidates) {
+    if (!(ref.h > 0)) continue;
+    const ratio = value / ref.h;
+    const offBy = Math.abs(ratio - 1);
+    if (offBy > MATCH_NEAR_TOLERANCE) continue;
+    // Prefer the closest; break ties toward better-known references.
+    const rank = offBy - (ref.quality || 0) * 0.0005;
+    if (!best || rank < best.rank) {
+      best = { ref, ratio, rank, tier: offBy <= MATCH_EXACT_TOLERANCE ? 'exact' : 'near' };
+    }
+  }
+
+  if (!best) return null;
+  return { ref: best.ref, ratio: best.ratio, tier: best.tier };
+}
+
+/** Free-text search across every reference in every dimension. */
+function searchReferences(query, limit = 8) {
+  const q = query.trim().toLowerCase();
+  if (q.length < 2) return [];
+
+  const words = q.split(/\s+/).filter(Boolean);
+  const scored = [];
+
+  for (const ref of ALL_REFERENCES) {
+    const name = ref.name.toLowerCase();
+    const aliases = (ref.aliases || []).map((a) => a.toLowerCase());
+    const haystack = [name, ref.phrase || '', ...aliases].join(' ').toLowerCase();
+
+    let rank;
+    if (name === q) rank = 0;
+    else if (name.startsWith(q)) rank = 1;
+    else if (name.includes(q)) rank = 2;
+    else if (aliases.some((a) => a === q)) rank = 3;
+    else if (aliases.some((a) => a.startsWith(q) || q.startsWith(a))) rank = 4;
+    else if (words.every((word) => haystack.includes(word))) rank = 5;
+    else continue;
+
+    scored.push({ ...ref, rank });
+  }
+
+  return scored
+    .sort((a, b) => a.rank - b.rank || (b.quality || 0) - (a.quality || 0) || a.name.localeCompare(b.name))
+    .slice(0, limit);
+}
+
+/**
+ * Bar width as a percentage, on a log scale so that references spanning
+ * several orders of magnitude all stay legible.
+ */
+function logBarPercent(value, minValue, maxValue) {
+  const safe = Math.max(value, Number.MIN_VALUE);
+  const minLog = Math.log10(Math.max(minValue, Number.MIN_VALUE));
+  const maxLog = Math.log10(Math.max(maxValue, Number.MIN_VALUE));
+  if (!Number.isFinite(minLog) || !Number.isFinite(maxLog) || maxLog === minLog) return 100;
+  const pct = 8 + ((Math.log10(safe) - minLog) / (maxLog - minLog)) * 92;
+  return Math.min(Math.max(pct, 4), 100);
+}
+
+/** Deterministic colour index, so a reference keeps its colour as you type. */
+function colorIndexFor(id, paletteLength) {
+  let hash = 0;
+  for (let i = 0; i < id.length; i += 1) {
+    hash = (hash * 31 + id.charCodeAt(i)) % 100000;
+  }
+  return hash % paletteLength;
+}
+
+/* ---- src/lib/shapes.js ---- */
+/** SVG silhouette primitives, drawn from a shared baseline. */
+
+const SILHOUETTE_PALETTE = ['#7d93ab', '#5fa8a0', '#c0674a', '#8ba888', '#9a7bb0', '#c9a25e'];
+
+function drawShape(type, cx, baseY, h, color) {
+  const top = baseY - h;
+
+  switch (type) {
+    case 'human': {
+      const bw = Math.max(h * 0.22, 4);
+      const headR = Math.max(h * 0.16, 3);
+      return `<rect x="${cx - bw / 2}" y="${top + headR * 1.7}" width="${bw}" height="${Math.max(h - headR * 1.7, 1)}" rx="${bw * 0.4}" fill="${color}"/>
+        <circle cx="${cx}" cy="${top + headR}" r="${headR}" fill="${color}"/>`;
+    }
+    case 'quad': {
+      const bodyH = h * 0.32;
+      const bodyW = Math.min(42, h * 1.4);
+      const bodyY = baseY - bodyH - h * 0.12;
+      const neckH = h - bodyH - h * 0.12;
+      return `<rect x="${cx - 2}" y="${top}" width="9" height="${Math.max(neckH, 1)}" rx="3" fill="${color}"/>
+        <circle cx="${cx + 2}" cy="${top}" r="6" fill="${color}"/>
+        <rect x="${cx - bodyW / 2}" y="${bodyY}" width="${bodyW}" height="${bodyH}" rx="${bodyH * 0.3}" fill="${color}"/>
+        <rect x="${cx - bodyW / 2 + 4}" y="${bodyY + bodyH}" width="5" height="${h * 0.12}" fill="${color}"/>
+        <rect x="${cx + bodyW / 2 - 9}" y="${bodyY + bodyH}" width="5" height="${h * 0.12}" fill="${color}"/>`;
+    }
+    case 'biped': {
+      const legH = h * 0.32;
+      const bodyRy = h * 0.26;
+      const bodyRx = Math.min(26, h * 0.8);
+      const bodyCy = baseY - legH - bodyRy;
+      const headR = h * 0.13;
+      return `<path d="M${cx - bodyRx + 4},${bodyCy} Q${cx - bodyRx - 16},${bodyCy - 6} ${cx - bodyRx - 30},${bodyCy + 8}" fill="none" stroke="${color}" stroke-width="${Math.max(h * 0.05, 3)}" stroke-linecap="round"/>
+        <rect x="${cx - 9}" y="${baseY - legH}" width="7" height="${legH}" rx="2" fill="${color}"/>
+        <rect x="${cx + 3}" y="${baseY - legH}" width="7" height="${legH}" rx="2" fill="${color}"/>
+        <ellipse cx="${cx}" cy="${bodyCy}" rx="${bodyRx}" ry="${bodyRy}" fill="${color}"/>
+        <circle cx="${cx + bodyRx - 4}" cy="${bodyCy - bodyRy + headR}" r="${headR}" fill="${color}"/>`;
+    }
+    case 'robot': {
+      const legH = h * 0.3;
+      const bodyH = h * 0.4;
+      const bodyW = Math.min(34, h);
+      const bodyY = baseY - legH - bodyH;
+      const headS = h * 0.16;
+      return `<rect x="${cx - 8}" y="${baseY - legH}" width="7" height="${legH}" fill="${color}"/>
+        <rect x="${cx + 1}" y="${baseY - legH}" width="7" height="${legH}" fill="${color}"/>
+        <rect x="${cx - bodyW / 2}" y="${bodyY}" width="${bodyW}" height="${bodyH}" rx="4" fill="${color}"/>
+        <rect x="${cx - bodyW / 2 - 9}" y="${bodyY + 6}" width="7" height="${bodyH * 0.7}" fill="${color}"/>
+        <rect x="${cx + bodyW / 2 + 2}" y="${bodyY + 6}" width="7" height="${bodyH * 0.7}" fill="${color}"/>
+        <rect x="${cx - headS / 2}" y="${bodyY - headS}" width="${headS}" height="${headS}" rx="2" fill="${color}"/>`;
+    }
+    case 'block': {
+      const w = 62;
+      const rows = Math.max(Math.floor(h / 28), 0);
+      let lines = '';
+      for (let i = 1; i <= rows; i += 1) {
+        lines += `<line x1="${cx - w / 2}" y1="${top + i * 28}" x2="${cx + w / 2}" y2="${top + i * 28}" stroke="var(--surface)" stroke-width="1" opacity="0.35"/>`;
+      }
+      return `<rect x="${cx - w / 2}" y="${top}" width="${w}" height="${h}" rx="3" fill="${color}"/>${lines}`;
+    }
+    case 'lattice': {
+      const baseW = 34;
+      const topW = 6;
+      return `<polygon points="${cx - baseW / 2},${baseY} ${cx + baseW / 2},${baseY} ${cx + topW / 2},${top} ${cx - topW / 2},${top}" fill="${color}" opacity="0.9"/>
+        <line x1="${cx - baseW / 2 + 4}" y1="${baseY - h * 0.3}" x2="${cx + baseW / 2 - 4}" y2="${baseY - h * 0.3}" stroke="var(--surface)" stroke-width="1" opacity="0.4"/>
+        <line x1="${cx - baseW * 0.3}" y1="${baseY - h * 0.6}" x2="${cx + baseW * 0.3}" y2="${baseY - h * 0.6}" stroke="var(--surface)" stroke-width="1" opacity="0.4"/>`;
+    }
+    case 'rocket': {
+      const bw = 18;
+      const bodyH = h * 0.82;
+      return `<rect x="${cx - bw / 2}" y="${baseY - bodyH}" width="${bw}" height="${bodyH}" fill="${color}"/>
+        <polygon points="${cx - bw / 2},${baseY - bodyH} ${cx + bw / 2},${baseY - bodyH} ${cx},${top}" fill="${color}"/>
+        <polygon points="${cx - bw / 2},${baseY} ${cx - bw / 2 - 10},${baseY} ${cx - bw / 2},${baseY - h * 0.15}" fill="${color}"/>
+        <polygon points="${cx + bw / 2},${baseY} ${cx + bw / 2 + 10},${baseY} ${cx + bw / 2},${baseY - h * 0.15}" fill="${color}"/>`;
+    }
+    case 'mountain':
+      return `<polygon points="${cx - 48},${baseY} ${cx},${top} ${cx + 48},${baseY}" fill="${color}"/>`;
+    case 'tree': {
+      const trunkH = h * 0.28;
+      const canR = h * 0.4;
+      return `<rect x="${cx - 5}" y="${baseY - trunkH}" width="10" height="${trunkH}" fill="${color}"/>
+        <circle cx="${cx}" cy="${baseY - trunkH - canR + 8}" r="${canR}" fill="${color}"/>`;
+    }
+    case 'ship': {
+      const hullH = h * 0.4;
+      return `<path d="M${cx - 55},${baseY - hullH} L${cx + 55},${baseY - hullH} L${cx + 42},${baseY} L${cx - 42},${baseY} Z" fill="${color}"/>
+        <rect x="${cx - 14}" y="${top}" width="28" height="${Math.max(h - hullH, 1)}" rx="2" fill="${color}"/>`;
+    }
+    case 'aircraft': {
+      const bodyH = h * 0.3;
+      const bodyY = baseY - h * 0.55;
+      return `<rect x="${cx - 45}" y="${bodyY}" width="90" height="${bodyH}" rx="${bodyH / 2}" fill="${color}"/>
+        <polygon points="${cx - 15},${bodyY} ${cx + 15},${bodyY} ${cx},${top}" fill="${color}"/>
+        <polygon points="${cx - 5},${bodyY + bodyH} ${cx + 35},${bodyY + bodyH} ${cx + 15},${baseY}" fill="${color}" opacity="0.85"/>`;
+    }
+    case 'sphere': {
+      const r = h / 2;
+      return `<circle cx="${cx}" cy="${baseY - r}" r="${r}" fill="${color}"/>`;
+    }
+    case 'wedge':
+      return `<polygon points="${cx - 50},${baseY - h * 0.15} ${cx + 50},${baseY - h * 0.5} ${cx - 50},${baseY - h * 0.85}" fill="${color}"/>`;
+    case 'pole': {
+      const ringR = Math.min(h * 0.18, 16);
+      return `<rect x="${cx - 3}" y="${top}" width="6" height="${h}" fill="${color}"/>
+        <circle cx="${cx}" cy="${top + ringR + 2}" r="${ringR}" fill="none" stroke="${color}" stroke-width="3"/>`;
+    }
+    default:
+      return `<rect x="${cx - 25}" y="${top}" width="50" height="${h}" rx="4" fill="${color}"/>`;
+  }
+}
+
+/* ---- src/lib/interpreter.js ---- */
+/** Parses free-text measurements like "500 MW" or "3 million litres". */
+
+
+
+/**
+ * Spelled-out multipliers only.
+ * Single-letter shorthand is deliberately absent: "3 m" is far more likely to
+ * mean three metres than three million of something, and "3 k" / "3 b" buy
+ * almost nothing while costing clarity. Every key here must also appear in the
+ * parser regex below — a multiplier the regex cannot reach is dead code.
+ */
+const WORD_MULTIPLIERS = {
+  thousand: 1e3,
+  million: 1e6,
+  billion: 1e9,
+  trillion: 1e12,
+};
+
+const MULTIPLIER_WORDS = Object.keys(WORD_MULTIPLIERS);
+
+const NOISE = /\s+of\s+(power|energy|water|length|distance|time|duration|height|depth)\b/gi;
+
+function normaliseInput(text) {
+  return String(text)
+    .replace(/μ/g, 'µ')
+    .replace(NOISE, '')
+    .replace(/[\u2013\u2014]/g, '-')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+/**
+ * Returns one of:
+ *   { ok: true, ... }
+ *   { ok: false, reason: 'empty' | 'negative' | 'zero' | 'unparsed' | 'unknown-unit', token? }
+ */
+function parseMeasurement(rawText) {
+  const text = normaliseInput(rawText);
+  if (!text) return { ok: false, reason: 'empty' };
+
+  // number [word multiplier] unit — the unit may be glued to the number ("500MW").
+  // Thousands separators must be properly grouped, so "5,,000" is rejected
+  // rather than quietly read as 5000.
+  const match = text.match(
+    /^(-?(?:\d{1,3}(?:,\d{3})+|\d+)(?:\.\d+)?(?:[eE][+-]?\d+)?)\s*(thousand|million|billion|trillion)?\s*([a-zA-Zµ][a-zA-Zµ^0-9]*)$/i
+  );
+  if (!match) return { ok: false, reason: 'unparsed' };
+
+  const entered = parseFloat(match[1].replace(/,/g, ''));
+  if (!Number.isFinite(entered)) return { ok: false, reason: 'unparsed' };
+  if (entered < 0) return { ok: false, reason: 'negative' };
+
+  const wordMultiplier = match[2] ? WORD_MULTIPLIERS[match[2].toLowerCase()] : 1;
+  const unitToken = match[3];
+  const resolved = resolveUnit(unitToken);
+  if (!resolved) return { ok: false, reason: 'unknown-unit', token: unitToken };
+
+  const value = entered * wordMultiplier;
+  if (value === 0) return { ok: false, reason: 'zero' };
+
+  const dimension = DIMENSION_OF_UNIT[resolved.unitKey];
+  const baseValue = value * UNIT_MULT[resolved.unitKey];
+  if (!(baseValue > 0) || !Number.isFinite(baseValue)) return { ok: false, reason: 'unparsed' };
+
+  return {
+    ok: true,
+    entered,
+    wordMultiplier,
+    value,
+    unitKey: resolved.unitKey,
+    unitName: unitLabel(resolved.unitKey),
+    dimension,
+    baseValue,
+    confidence: resolved.confidence,
+    assumed: resolved.assumed,
+    alternatives: resolved.alternatives,
+    readAs: `${value.toLocaleString('en-US', { maximumFractionDigits: 6 })} ${unitLabel(resolved.unitKey)}`,
+  };
+}
+
+const PARSE_MESSAGES = {
+  empty: 'Type a measurement to interpret, for example 500 MW or 12 km.',
+  negative: 'Measurements start at zero. Try a positive number.',
+  zero: 'Zero has nothing to compare against. Try any value above zero.',
+  unparsed: 'That needs a number followed by a unit — try “500 MW”, “12 km”, or “3 million litres”.',
+  'unknown-unit': 'That unit is not in BENCH yet. Supported: length, time, power, and water units.',
+};
+
+/* ---- src/ui/views.js ---- */
+/** HTML renderers. Every dynamic string is escaped before interpolation. */
+
+
+
+
+
+
+
+const MAX_STACK_ICONS = 40;
+
+function colorFor(ref) {
+  return SILHOUETTE_PALETTE[colorIndexFor(ref.id || ref.name, SILHOUETTE_PALETTE.length)];
+}
+
+function sourceTag(ref) {
+  if (!ref.source) return '';
+  const cite = formatSource(ref.source);
+  const link = ref.source.url
+    ? ` <a href="${esc(ref.source.url)}" target="_blank" rel="noopener noreferrer">Open</a>`
+    : '';
+  return ` <details class="src"><summary aria-label="Show source">ⓘ</summary><span class="src-body">Source: ${esc(cite)}${link}</span></details>`;
+}
+
+function qualifierTag(ref) {
+  if (!ref.qualifier) return '';
+  return `<p class="qualifier">${esc(ref.qualifier)}</p>`;
+}
+
+function flowSuffix(dimension, waterBasis) {
+  return dimension === 'water' && waterBasis === 'flow' ? ' per day' : '';
+}
+
+/* ---------------------------------------------------------------- charts -- */
+
+/**
+ * Side-by-side bars. The user's own measurement is always the first row —
+ * it is the thing being explained, so it never gets buried mid-list.
+ */
+function renderBars({ value, pool, dimension, waterBasis, showAll }) {
+  const suffix = flowSuffix(dimension, waterBasis);
+  const refs = showAll
+    ? [...pool].sort((a, b) => b.h - a.h)
+    : computeUseful(value, pool, 8).sort((a, b) => b.h - a.h);
+
+  if (!refs.length) return emptyPool();
+
+  const magnitudes = [value, ...refs.map((r) => r.h)];
+  const maxH = Math.max(...magnitudes);
+  const minH = Math.min(...magnitudes);
+
+  const youRow = `
+    <li class="bar-row bar-row--you">
+      <span class="bar-icon" aria-hidden="true">${esc(DIMENSION_META[dimension].icon)}</span>
+      <span class="bar-name">${esc(DIMENSION_META[dimension].youLabel)}
+        <small>${esc(formatMagnitude(dimension, value, suffix))}</small>
+      </span>
+      <span class="bar-track"><span class="bar-fill bar-fill--you" style="width:${logBarPercent(value, minH, maxH)}%"></span></span>
+      <span class="bar-ratio bar-ratio--you">you</span>
+    </li>`;
+
+  const rows = refs
+    .map((ref) => {
+      const pct = logBarPercent(ref.h, minH, maxH);
+      const ratio = value / ref.h;
+      return `
+      <li class="bar-row">
+        <span class="bar-icon" aria-hidden="true">${esc(ref.icon)}</span>
+        <span class="bar-name">${esc(ref.name)}${sourceTag(ref)}
+          <small>${esc(formatReference(dimension, ref, suffix))}</small>
+          ${qualifierTag(ref)}
+        </span>
+        <span class="bar-track"><span class="bar-fill" style="width:${pct}%;background:${colorFor(ref)}"></span></span>
+        <span class="bar-ratio" title="Your figure divided by this reference">${esc(formatRatio(ratio))}</span>
+      </li>`;
+    })
+    .join('');
+
+  const toggle =
+    pool.length > 8
+      ? `<button class="ghost-btn" id="toggleAll" type="button">${showAll ? 'Show the 8 closest' : `Show all ${pool.length} references`}</button>`
+      : '';
+
+  return `
+    <p class="axis-note">Bars use a logarithmic scale so every reference stays readable. The ratio column reads “your figure ÷ this reference”.</p>
+    <ul class="bar-list">${youRow}${rows}</ul>
+    <div class="row-actions">${toggle}</div>`;
+}
+
+/** Stack mode: how many of each reference it takes to reach the user's figure. */
+function renderStack({ value, pool, dimension, waterBasis }) {
+  const suffix = flowSuffix(dimension, waterBasis);
+  const refs = computeUseful(value, pool, 6);
+  if (!refs.length) return emptyPool();
+
+  const header = `
+    <div class="you-pin">
+      <span class="you-pin-label">Your figure</span>
+      <span class="you-pin-value">${esc(formatMagnitude(dimension, value, suffix))}</span>
+    </div>`;
+
+  const rows = refs
+    .map((ref) => {
+      const count = value / ref.h;
+      // Explicit rather than "about 25% of one": the object name sits in a
+      // separate column, so the count must stand on its own.
+      const headline =
+        count >= 1
+          ? `${formatCount(count)} of these`
+          : `${count >= 0.01 ? `${Math.round(count * 100)}% of one` : `1/${formatCount(Math.round(1 / count))} of one`}`;
+      const whole = Math.floor(Math.min(count, MAX_STACK_ICONS));
+      const remainder = count - Math.floor(count);
+      let icons = ref.icon.repeat(Math.max(whole, 0));
+      if (remainder > 0.05 && whole < MAX_STACK_ICONS) {
+        icons += `<span class="icon-partial" title="Partial">${esc(ref.icon)}</span>`;
+      }
+      if (count > MAX_STACK_ICONS) icons += ' …';
+      if (!icons) icons = `<span class="icon-partial">${esc(ref.icon)}</span>`;
+
+      return `
+      <li class="stack-row">
+        <div class="stack-head">
+          <span class="stack-name">${esc(ref.icon)} ${esc(ref.name)}${sourceTag(ref)}
+            <small>${esc(formatReference(dimension, ref, suffix))}</small></span>
+          <span class="stack-count">${esc(headline)}</span>
+        </div>
+        ${qualifierTag(ref)}
+        <p class="stack-icons" aria-hidden="true">${icons}</p>
+      </li>`;
+    })
+    .join('');
+
+  return header + `<ul class="stack-list">${rows}</ul>`;
+}
+
+/**
+ * Silhouette mode: true-to-scale drawing, ordered by size.
+ * `compact` renders a smaller, fewer-item version for the answer card, where it
+ * has to sit inside a panel rather than own the full width of the page.
+ */
+function renderSilhouette({ value, pool, dimension, waterBasis, limit = 5, compact = false }) {
+  const suffix = flowSuffix(dimension, waterBasis);
+  const nearest = computeNearest(value, pool, limit);
+  if (!nearest.length) return emptyPool();
+
+  const you = { id: '__you__', name: DIMENSION_META[dimension].youLabel, h: value, isYou: true, shape: 'human' };
+  const all = [you, ...nearest].sort((a, b) => a.h - b.h);
+  const maxH = Math.max(...all.map((o) => o.h));
+  const minH = Math.min(...all.map((o) => o.h));
+  const spread = maxH / Math.max(minH, Number.MIN_VALUE);
+
+  const drawH = compact ? 150 : 300;
+  const slot = compact ? 92 : 118;
+  const width = slot * all.length + 40;
+  const baseY = drawH + 16;
+  const svgH = baseY + (compact ? 46 : 56);
+
+  let shapes = '';
+  let labels = '';
+  all.forEach((o, i) => {
+    const cx = 40 + slot * i + slot / 2;
+    const hPx = Math.max((o.h / maxH) * drawH, 5);
+    const color = o.isYou ? 'var(--accent-bright)' : colorFor(o);
+    shapes += drawShape(o.shape, cx, baseY, hPx, color);
+    if (o.isYou) {
+      shapes += `<line x1="${cx}" y1="${baseY - hPx - 10}" x2="${cx}" y2="${baseY}" stroke="var(--accent-bright)" stroke-width="1" stroke-dasharray="3,3" opacity="0.55"/>`;
+    }
+    const label = o.isYou ? 'Yours' : truncate(o.name, compact ? 16 : 28);
+    labels += `<text x="${cx}" y="${baseY + (compact ? 18 : 22)}" text-anchor="middle" fill="${o.isYou ? 'var(--accent-bright)' : 'var(--ink)'}" font-size="${compact ? 11 : 12}" font-weight="${o.isYou ? 600 : 500}">${esc(label)}</text>
+      <text x="${cx}" y="${baseY + (compact ? 32 : 38)}" text-anchor="middle" fill="var(--muted)" font-size="10">${esc(o.isYou ? formatMagnitude(dimension, o.h, suffix) : formatReference(dimension, o, suffix))}</text>`;
+  });
+
+  const summary = all
+    .map((o) => `${o.isYou ? 'your figure' : o.name} at ${o.isYou ? formatMagnitude(dimension, o.h, suffix) : formatReference(dimension, o, suffix)}`)
+    .join(', ');
+
+  const warning =
+    spread > 1000
+      ? `<p class="warn">These span more than three orders of magnitude, so at true scale the smallest are nearly invisible. Shown honestly anyway — side-by-side or stack will read more clearly at this range.</p>`
+      : '';
+
+  const caption = compact
+    ? `<p class="axis-note">To scale, smallest to largest. Yours is highlighted.</p>`
+    : `<p class="axis-note">The ${nearest.length} closest references, drawn to a shared scale and ordered smallest to largest.</p>`;
+
+  return `
+    ${warning}
+    ${caption}
+    <div class="sil-scroll${compact ? ' sil-scroll--compact' : ''}">
+      <svg width="${width}" height="${svgH}" viewBox="0 0 ${width} ${svgH}" role="img" aria-label="Scale comparison: ${esc(summary)}">
+        <title>Scale comparison, smallest to largest</title>
+        <line x1="20" y1="${baseY}" x2="${width - 20}" y2="${baseY}" stroke="var(--rule)" stroke-width="1"/>
+        ${shapes}
+        ${labels}
+      </svg>
+    </div>`;
+}
+
+/** Keep long reference names from colliding in the compact drawing. */
+function truncate(text, max) {
+  return text.length <= max ? text : `${text.slice(0, max - 1).trimEnd()}…`;
+}
+
+function emptyPool() {
+  return `<p class="empty">No references in this set yet. Try another category.</p>`;
+}
+
+/* ------------------------------------------------------- direct match --- */
+
+/**
+ * The signature moment: when a number lands on a reference almost exactly,
+ * say so plainly and get out of the way.
+ */
+function renderDirectMatch(match, dimension, waterBasis) {
+  if (!match) return '';
+  const suffix = flowSuffix(dimension, waterBasis);
+  const { ref, ratio, tier } = match;
+  const offBy = Math.abs(ratio - 1) * 100;
+  const headline =
+    tier === 'exact'
+      ? `That is a ${ref.name}.`
+      : `That is nearly a ${ref.name}.`;
+  const detail =
+    tier === 'exact'
+      ? `Within ${offBy < 0.5 ? 'half a percent' : `${formatNum(offBy)}%`} of ${formatReference(dimension, ref, suffix)}.`
+      : `Off by ${formatNum(offBy)}% from ${formatReference(dimension, ref, suffix)}.`;
+
+  return `
+    <aside class="match match--${tier}" aria-label="Direct match found">
+      <span class="match-icon" aria-hidden="true">${esc(ref.icon)}</span>
+      <div>
+        <p class="match-eyebrow">${tier === 'exact' ? 'Direct match' : 'Close match'}</p>
+        <p class="match-headline">${esc(headline)}</p>
+        <p class="match-detail">${esc(detail)}</p>
+        ${qualifierTag(ref)}
+      </div>
+    </aside>`;
+}
+
+/* ------------------------------------------------------------ search ---- */
+
+function renderSearchResults(results, query) {
+  if (!query.trim()) return '';
+  if (query.trim().length < 2) {
+    return `<p class="search-hint">Keep typing — two characters minimum.</p>`;
+  }
+  if (!results.length) {
+    return `<p class="search-hint">Nothing in the reference set matches “${esc(query)}”. Try a shorter word, or browse a dimension below.</p>`;
+  }
+
+  const items = results
+    .map((ref) => {
+      const suffix = ref.basis && ref.basis.perSeconds ? ' per day' : '';
+      const shown = ref.basis && ref.basis.perSeconds ? ref.h * (86400 / ref.basis.perSeconds) : ref.h;
+      return `
+      <li>
+        <button class="search-result" type="button" data-ref-id="${esc(ref.id)}" data-dimension="${esc(ref.dimension)}" data-category="${esc(ref.category)}">
+          <span class="search-icon" aria-hidden="true">${esc(ref.icon)}</span>
+          <span class="search-text">
+            <span class="search-name">${esc(ref.name)}</span>
+            <span class="search-meta">${esc(formatReference(ref.dimension, { ...ref, h: shown }, suffix))} · ${esc(DIMENSION_META[ref.dimension].label)}</span>
+          </span>
+          <span class="search-go" aria-hidden="true">Use</span>
+        </button>
+      </li>`;
+    })
+    .join('');
+
+  return `<ul class="search-results">${items}</ul>`;
+}
+
+/* ---- src/main.js ---- */
+/** BENCH — application shell. */
+
+
+
+
+
+
+
+
+
+/* --------------------------------------------------------------- state -- */
+
+const PRESET_IDS = {
+  length: { explorer: ['eiffel', 'bluewhale', 'liberty', 'football'], geek: ['godzillaminus', 'gundam', 'attacktitan', 'deathstar'] },
+  time: { explorer: ['lifetime', 'movie', 'universeage', 'marathon'], geek: ['lotr', 'miller', 'groundhog', 'thirdage'] },
+  power: { explorer: ['hyperscale', 'nuclear', 'hoover', 'evcharger'], geek: ['lightning', 'bitcoin', 'supercomputer', 'superlaser'] },
+  water: { explorer: ['olympicpool', 'shower', 'bathtub', 'backyardpool'], geek: ['amazonriver', 'niagara'] },
+};
+
+const STARTING_VALUE = { length: 85, time: 2, power: 150, water: 300 };
+
+const state = {
+  dimension: 'length',
+  category: 'explorer',
+  mode: 'bars',
+  waterBasis: 'volume',
+  unit: 'm',
+  value: 85,
+  showAll: false,
+  theme: 'dark',
+};
+
+const els = {};
+function $(id) {
+  if (!els[id]) els[id] = document.getElementById(id);
+  return els[id];
+}
+
+/* ------------------------------------------------------------- helpers -- */
+
+function baseValue() {
+  const v = toBase(Number(state.value), state.unit);
+  return Number.isFinite(v) && v > 0 ? v : 0;
+}
+
+function currentPool() {
+  return getPool(state.dimension, state.category, state.waterBasis);
+}
+
+function debounce(fn, ms) {
+  let t;
+  return (...args) => {
+    clearTimeout(t);
+    t = setTimeout(() => fn(...args), ms);
+  };
+}
+
+function capitalise(text) {
+  return text.charAt(0).toUpperCase() + text.slice(1);
+}
+
+/** True on a local dev host. Kept free of build-tool globals so the
+ *  single-file bundle, which is a classic script, still parses. */
+function isDevHost() {
+  if (typeof location === 'undefined') return false;
+  return ['localhost', '127.0.0.1', '::1', ''].includes(location.hostname);
+}
+
+function findReference(id) {
+  return ALL_REFERENCES.find((r) => r.id === id) || null;
+}
+
+/* --------------------------------------------------------- persistence -- */
+
+function saveSettings() {
+  try {
+    localStorage.setItem(
+      'bench:v2',
+      JSON.stringify({
+        theme: state.theme,
+        dimension: state.dimension,
+        category: state.category,
+        mode: state.mode,
+        waterBasis: state.waterBasis,
+      })
+    );
+  } catch {
+    /* storage unavailable — defaults stand */
+  }
+}
+
+function loadSettings() {
+  try {
+    const raw = localStorage.getItem('bench:v2');
+    if (!raw) return;
+    const saved = JSON.parse(raw);
+    if (saved.theme === 'light' || saved.theme === 'dark') state.theme = saved.theme;
+    if (DIMENSIONS.includes(saved.dimension)) state.dimension = saved.dimension;
+    if (saved.category === 'explorer' || saved.category === 'geek') state.category = saved.category;
+    if (['bars', 'stack', 'silhouette'].includes(saved.mode)) state.mode = saved.mode;
+    if (saved.waterBasis === 'volume' || saved.waterBasis === 'flow') state.waterBasis = saved.waterBasis;
+  } catch {
+    /* corrupt payload — defaults stand */
+  }
+}
+
+function buildShareUrl() {
+  const params = new URLSearchParams({
+    v: String(state.value),
+    u: state.unit,
+    d: state.dimension,
+    c: state.category,
+    m: state.mode,
+  });
+  if (state.dimension === 'water') params.set('b', state.waterBasis);
+  return `${location.origin}${location.pathname}?${params.toString()}`;
+}
+
+function readUrlParams() {
+  try {
+    const p = new URLSearchParams(location.search);
+    const unit = p.get('u');
+    const value = Number(p.get('v'));
+    const dim = p.get('d');
+    if (!unit || !DIMENSION_OF_UNIT[unit] || !Number.isFinite(value) || value <= 0) return false;
+    if (dim && DIMENSION_OF_UNIT[unit] !== dim) return false;
+
+    state.dimension = DIMENSION_OF_UNIT[unit];
+    state.unit = unit;
+    state.value = value;
+    if (p.get('c') === 'geek' || p.get('c') === 'explorer') state.category = p.get('c');
+    if (['bars', 'stack', 'silhouette'].includes(p.get('m'))) state.mode = p.get('m');
+    if (p.get('b') === 'flow' || p.get('b') === 'volume') state.waterBasis = p.get('b');
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+/* ------------------------------------------------------------- controls -- */
+
+function syncControls() {
+  document.querySelectorAll('[data-dimension-btn]').forEach((btn) => {
+    const on = btn.dataset.dimensionBtn === state.dimension;
+    btn.classList.toggle('is-active', on);
+    btn.setAttribute('aria-pressed', String(on));
+  });
+  document.querySelectorAll('[data-mode-btn]').forEach((btn) => {
+    const on = btn.dataset.modeBtn === state.mode;
+    btn.classList.toggle('is-active', on);
+    btn.setAttribute('aria-pressed', String(on));
+  });
+  document.querySelectorAll('[data-category-btn]').forEach((btn) => {
+    const on = btn.dataset.categoryBtn === state.category;
+    btn.classList.toggle('is-active', on);
+    btn.setAttribute('aria-pressed', String(on));
+  });
+  document.querySelectorAll('[data-basis-btn]').forEach((btn) => {
+    const on = btn.dataset.basisBtn === state.waterBasis;
+    btn.classList.toggle('is-active', on);
+    btn.setAttribute('aria-pressed', String(on));
+  });
+
+  $('basisGroup').hidden = state.dimension !== 'water';
+  $('valueInput').value = String(state.value);
+  renderUnitOptions();
+  renderPresets();
+}
+
+/**
+ * In water-flow mode the value is an amount per day, so the unit control has to
+ * say so. "18.1 trillion L" and "18.1 trillion L / day" are different claims.
+ */
+function displayUnitLabel(label) {
+  return state.dimension === 'water' && state.waterBasis === 'flow' ? `${label} / day` : label;
+}
+
+/** Pick the unit that renders a base value as a readable number. */
+function bestUnitFor(dimension, baseVal) {
+  const options = UNIT_OPTIONS[dimension].filter(([key]) => Number.isFinite(UNIT_MULT[key]));
+  let best = BASE_UNIT[dimension];
+  let bestMult = UNIT_MULT[best];
+  for (const [key] of options) {
+    const mult = UNIT_MULT[key];
+    const scaled = baseVal / mult;
+    if (scaled >= 1 && scaled < 1000 && mult >= bestMult) {
+      best = key;
+      bestMult = mult;
+    }
+  }
+  if (baseVal / UNIT_MULT[best] >= 1000) {
+    for (const [key] of options) {
+      if (UNIT_MULT[key] > bestMult && baseVal / UNIT_MULT[key] >= 1) {
+        best = key;
+        bestMult = UNIT_MULT[key];
+      }
+    }
+  }
+  return best;
+}
+
+function renderUnitOptions() {
+  const select = $('unitSelect');
+  select.innerHTML = UNIT_OPTIONS[state.dimension]
+    .map(([key, label]) => `<option value="${esc(key)}">${esc(displayUnitLabel(label))}</option>`)
+    .join('');
+  select.value = state.unit;
+  if (!select.value) {
+    state.unit = DEFAULT_UNIT[state.dimension];
+    select.value = state.unit;
+  }
+}
+
+function renderPresets() {
+  const ids = PRESET_IDS[state.dimension][state.category] || [];
+  const refs = ids.map(findReference).filter(Boolean);
+  $('presets').innerHTML = refs
+    .map((ref) => `<button class="preset" type="button" data-preset="${esc(ref.id)}">${esc(ref.icon)} ${esc(ref.name)}</button>`)
+    .join('');
+}
+
+/** Load a reference's magnitude into the input. */
+function applyReference(ref) {
+  state.dimension = ref.dimension || state.dimension;
+  if (ref.category) state.category = ref.category;
+  if (state.dimension === 'water') {
+    state.waterBasis = ref.basis && ref.basis.perSeconds ? 'flow' : 'volume';
+  }
+  const magnitude = ref.basis && ref.basis.perSeconds ? ref.h * (86400 / ref.basis.perSeconds) : ref.h;
+  state.unit = bestUnitFor(state.dimension, magnitude);
+  state.value = Number(fromBase(magnitude, state.unit).toPrecision(6));
+  state.showAll = false;
+  syncControls();
+  render();
+  saveSettings();
+}
+
+/* -------------------------------------------------------------- render -- */
+
+function render() {
+  const value = baseValue();
+  const { dimension, waterBasis } = state;
+  const pool = currentPool();
+
+  $('poolCount').textContent = `${pool.length} reference${pool.length === 1 ? '' : 's'}`;
+  $('modeTitle').textContent =
+    state.mode === 'bars' ? 'Compared with' : state.mode === 'stack' ? 'Stacked to reach' : 'Drawn to scale';
+
+  if (!value) {
+    $('matchSlot').innerHTML = '';
+    $('results').innerHTML = `<p class="empty">Enter a measurement above and BENCH will find what it matches.</p>`;
+    $('summary').textContent = 'No measurement entered yet.';
+    return;
+  }
+
+  const match = findDirectMatch(value, dimension, waterBasis);
+  $('matchSlot').innerHTML = renderDirectMatch(match, dimension, waterBasis);
+
+  const args = { value, pool, dimension, waterBasis, showAll: state.showAll };
+  $('results').innerHTML =
+    state.mode === 'bars' ? renderBars(args)
+      : state.mode === 'stack' ? renderStack(args)
+        : renderSilhouette(args);
+
+  const toggle = document.getElementById('toggleAll');
+  if (toggle) {
+    toggle.addEventListener('click', () => {
+      state.showAll = !state.showAll;
+      render();
+    });
+  }
+
+  // Short spoken summary, so screen readers get the answer rather than the whole table.
+  const top = computeUseful(value, pool, 1)[0];
+  const suffix = dimension === 'water' && waterBasis === 'flow' ? ' per day' : '';
+  $('summary').textContent = top
+    ? `${formatMagnitude(dimension, value, suffix)} is ${comparisonPhrase(value / top.h, top, dimension, waterBasis)}.`
+    : `${formatMagnitude(dimension, value, suffix)} entered.`;
+}
+
+/* --------------------------------------------------------- interpreter -- */
+
+function runInterpreter() {
+  const out = $('interpreterOut');
+  const parsed = parseMeasurement($('interpreterInput').value);
+
+  if (!parsed.ok) {
+    const tone = parsed.reason === 'empty' ? 'hint' : 'error';
+    const message =
+      parsed.reason === 'unknown-unit'
+        ? `BENCH does not know the unit “${esc(parsed.token)}” yet. It covers length, time, power, and water.`
+        : esc(PARSE_MESSAGES[parsed.reason]);
+    out.innerHTML = `<p class="interp-${tone}">${message}</p>`;
+    return;
+  }
+
+  state.dimension = parsed.dimension;
+  state.unit = parsed.unitKey;
+  state.value = parsed.value;
+  state.showAll = false;
+  if (parsed.dimension === 'water') state.waterBasis = 'volume';
+
+  const value = parsed.baseValue;
+  const pool = getPool(state.dimension, state.category, state.waterBasis);
+  const ranked = computeUseful(value, pool, 4);
+  const match = findDirectMatch(value, state.dimension, state.waterBasis);
+  const suffix = state.dimension === 'water' && state.waterBasis === 'flow' ? ' per day' : '';
+
+  const leadRef = match ? match.ref : ranked[0];
+  const lead = leadRef
+    ? `${formatMagnitude(state.dimension, value, suffix)} is ${comparisonPhrase(value / leadRef.h, leadRef, state.dimension, state.waterBasis)}.`
+    : `${formatMagnitude(state.dimension, value, suffix)}.`;
+
+  const others = ranked
+    .filter((ref) => !leadRef || ref.id !== leadRef.id)
+    .map((ref) => `<li>${esc(capitalise(comparisonPhrase(value / ref.h, ref, state.dimension, state.waterBasis)))}</li>`)
+    .join('');
+
+  const assumption = parsed.assumed
+    ? `<p class="interp-assumption">Read as <b>${esc(parsed.readAs)}</b>. If you meant ${parsed.alternatives.map((a) => esc(unitLabel(a))).join(' or ')}, type the unit with its exact capitalisation.</p>`
+    : `<p class="interp-assumption">Read as <b>${esc(parsed.readAs)}</b>.</p>`;
+
+  const caveats = ranked.filter((r) => r.qualifier);
+  const caveatText = caveats.length
+    ? caveats.map((r) => `${r.name}: ${r.qualifier}`).join(' ')
+    : 'Figures are rounded and change over time.';
+
+  const sources = [...new Set(ranked.filter((r) => r.source).map((r) => formatSource(r.source)))];
+
+  // A drawing of the answer, sized to sit inside the card. Three references is
+  // enough to read the scale; the full view is a tap away below.
+  const preview = renderSilhouette({
+    value,
+    pool,
+    dimension: state.dimension,
+    waterBasis: state.waterBasis,
+    limit: 3,
+    compact: true,
+  });
+
+  out.innerHTML = `
+    <div class="answer">
+      <p class="answer-eyebrow">In plain English</p>
+      <p class="answer-text">${esc(lead)}</p>
+      <div class="answer-visual">${preview}</div>
+    </div>
+    ${assumption}
+    ${others ? `<p class="interp-label">Other ways to see it</p><ul class="interp-list">${others}</ul>` : ''}
+    <p class="interp-label">Where this comparison stops working</p>
+    <p class="interp-caveat">${esc(caveatText)} BENCH figures are educational approximations, not engineering data.</p>
+    ${sources.length ? `<p class="interp-sources">Sources: ${esc(sources.join('; '))}</p>` : ''}
+    <div class="row-actions">
+      <button class="ghost-btn" type="button" id="copyAnswer">Copy answer</button>
+      <button class="ghost-btn" type="button" id="shareAnswer">Copy link</button>
+    </div>
+    <p class="action-msg" id="actionMsg" role="status"></p>`;
+
+  syncControls();
+  render();
+  saveSettings();
+
+  document.getElementById('copyAnswer').addEventListener('click', async () => {
+    await copyText(lead, 'Answer copied.');
+  });
+  document.getElementById('shareAnswer').addEventListener('click', async () => {
+    const url = buildShareUrl();
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: 'BENCH', text: lead, url });
+        return;
+      } catch {
+        /* user dismissed — fall through to copy */
+      }
+    }
+    await copyText(url, 'Link copied.');
+  });
+}
+
+async function copyText(text, successMessage) {
+  const msg = document.getElementById('actionMsg');
+  try {
+    await navigator.clipboard.writeText(text);
+    if (msg) msg.textContent = successMessage;
+  } catch {
+    if (msg) msg.textContent = 'Copying is blocked in this browser. Select the text to copy it manually.';
+  }
+}
+
+/* -------------------------------------------------------------- search -- */
+
+function runSearch() {
+  const query = $('searchInput').value;
+  const results = searchReferences(query);
+  $('searchOut').innerHTML = renderSearchResults(results, query);
+}
+
+/* ------------------------------------------------------------- wiring --- */
+
+function wire() {
+  document.querySelectorAll('[data-dimension-btn]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      state.dimension = btn.dataset.dimensionBtn;
+      state.unit = DEFAULT_UNIT[state.dimension];
+      state.value = STARTING_VALUE[state.dimension];
+      state.showAll = false;
+      syncControls();
+      render();
+      saveSettings();
+    });
+  });
+
+  document.querySelectorAll('[data-mode-btn]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      state.mode = btn.dataset.modeBtn;
+      syncControls();
+      render();
+      saveSettings();
+    });
+  });
+
+  document.querySelectorAll('[data-category-btn]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      state.category = btn.dataset.categoryBtn;
+      state.showAll = false;
+      syncControls();
+      render();
+      saveSettings();
+    });
+  });
+
+  document.querySelectorAll('[data-basis-btn]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      state.waterBasis = btn.dataset.basisBtn;
+      state.showAll = false;
+      syncControls();
+      render();
+      saveSettings();
+    });
+  });
+
+  const onValueChange = debounce(() => {
+    state.value = Number($('valueInput').value);
+    state.showAll = false;
+    render();
+  }, 250);
+  $('valueInput').addEventListener('input', onValueChange);
+
+  $('unitSelect').addEventListener('change', () => {
+    state.unit = $('unitSelect').value;
+    render();
+  });
+
+  $('presets').addEventListener('click', (event) => {
+    const btn = event.target.closest('[data-preset]');
+    if (!btn) return;
+    const ref = findReference(btn.dataset.preset);
+    if (ref) applyReference(ref);
+  });
+
+  $('interpretBtn').addEventListener('click', runInterpreter);
+  $('interpreterInput').addEventListener('keydown', (event) => {
+    if (event.key === 'Enter') runInterpreter();
+  });
+
+  $('searchInput').addEventListener('input', debounce(runSearch, 200));
+  $('searchOut').addEventListener('click', (event) => {
+    const btn = event.target.closest('[data-ref-id]');
+    if (!btn) return;
+    const ref = findReference(btn.dataset.refId);
+    if (!ref) return;
+    applyReference(ref);
+    $('searchInput').value = '';
+    $('searchOut').innerHTML = '';
+    $('results').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+
+  $('themeToggle').addEventListener('click', () => {
+    state.theme = state.theme === 'dark' ? 'light' : 'dark';
+    applyTheme();
+    saveSettings();
+  });
+}
+
+function applyTheme() {
+  document.documentElement.dataset.theme = state.theme;
+  $('themeToggle').textContent = state.theme === 'dark' ? 'Light mode' : 'Dark mode';
+  $('themeToggle').setAttribute('aria-label', `Switch to ${state.theme === 'dark' ? 'light' : 'dark'} mode`);
+}
+
+/* ---------------------------------------------------------------- init -- */
+
+function init() {
+  // Curated data is the product. A bad edit should surface on page load in
+  // development, not as a nonsense chart in production.
+  if (isDevHost()) {
+    const problems = validateReferences();
+    if (problems.length) console.error(`BENCH reference data has ${problems.length} problem(s):`, problems);
+  }
+
+  loadSettings();
+  const fromUrl = readUrlParams();
+  if (!fromUrl) {
+    state.unit = DEFAULT_UNIT[state.dimension];
+    state.value = STARTING_VALUE[state.dimension];
+  }
+  applyTheme();
+  wire();
+  syncControls();
+  render();
+
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./sw.js').catch(() => {});
+    });
+  }
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', init);
+} else {
+  init();
+}
+
+})();
+</script>
+</body>
+</html>

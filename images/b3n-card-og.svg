@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-label="B3N Industries: turn the imaginary into real things">
+  <rect width="1200" height="630" fill="#111216"/>
+  <rect x="0" y="0" width="11" height="630" fill="#0057d9"/>
+  <rect x="1189" y="0" width="11" height="630" fill="#0057d9"/>
+  <text x="75" y="205" fill="#f8f9fc" font-family="Arial,Helvetica,sans-serif" font-size="118" font-weight="900" letter-spacing="-10">B3N</text>
+  <text x="80" y="267" fill="#f8f9fc" font-family="Arial,Helvetica,sans-serif" font-size="25" font-weight="700" letter-spacing="10">INDUSTRIES</text>
+  <rect x="80" y="311" width="115" height="6" fill="#0057d9"/>
+  <text x="80" y="398" fill="#f8f9fc" font-family="Arial,Helvetica,sans-serif" font-size="50" font-weight="800">TURN THE IMAGINARY</text>
+  <text x="80" y="457" fill="#f8f9fc" font-family="Arial,Helvetica,sans-serif" font-size="50" font-weight="800">INTO REAL THINGS.</text>
+  <text x="80" y="550" fill="#9cb8e7" font-family="Arial,Helvetica,sans-serif" font-size="22" letter-spacing="4">DESIGN  ·  PROTOTYPING  ·  WEBSITES  ·  360° TOURS</text>
+</svg>

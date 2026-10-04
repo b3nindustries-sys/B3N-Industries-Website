@@ -1,93 +1,46 @@
-# B3n Industries - Official Website
+# B3N Industries Website
 
-A lightweight, responsive brochure site for B3n Industries. It introduces the studio, states the
-core vision, and documents the first product currently in development.
+Static, responsive company website for [b3nindustries.com](https://b3nindustries.com). No build step, backend, cookies or analytics are required.
 
-**Live URL:** [https://b3nindustries.com](https://b3nindustries.com)
+## Pages
 
----
+- `index.html` — company positioning and primary conversion page
+- `services.html` — engineering and product development services
+- `products.html` — FOCUS and B3N product development programs
+- `focus.html` / `focus.css` / `focus.js` — dedicated FOCUS Wallet page with the technical-drawing presentation and draggable product render
+- `bench.html` — standalone BENCH measurement comparison page, supplied by Kyle; its styling, reference data and behavior are self-contained
+- `spaces.html` — SPACES 360° virtual tour service
+- `projects.html` — selected work and research programs
+- `about.html` — Kyle Bennett's digital business card and founder profile
+- `contact.html` — project inquiry information and direct email
 
-## 1. Project Overview
-Three static pages, built around the Aug 2026 brand artwork:
-* **index.html** — hero with the prototype drawing plate, signal band and closing call.
-* **contact.html** — mail-only contact sheet, laid out to fit a single viewport (no forms, no
-  tracking, no scrolling).
-* Fully responsive across mobile, tablet and desktop viewports.
+## Search foundations
 
-### Design system — "Technical Control Document"
-The site is presented as the engineering document behind the product:
-* Ink ground (`#0b0c0e`) with a drafting grid, film grain and a warm signal glow.
-* Silver hairlines, mono annotations, dimension lines and document/revision numbers.
-* One hot accent — brand orange `#e57224` — against the brand blue `#365fab`.
-* Type: **Archivo** (variable, expanded/heavy) for display, **IBM Plex Mono** for annotation,
-  **IBM Plex Sans** for body copy.
+Every public page has a unique title, description, canonical URL and social-sharing metadata. The homepage establishes the B3N Industries organization and founder relationship in JSON-LD; relevant interior pages describe their page, person, service, product or app entity. `sitemap.xml` lists the nine public URLs and `robots.txt` advertises the sitemap.
 
-Brand colours are defined once as CSS custom properties at the top of `stylesheet.css`:
-blue `#365fab`, orange `#e57224`, teal `#116e6b`, slate `#40576b`, silver `#a7a9ac`,
-black `#221f1f`.
+Canonical and sitemap URLs match the static `.html` filenames, so the search signals point to the same paths that a manual or GitHub Pages upload reliably serves.
 
-### Two palettes
-The nav carries a swatch button that switches the whole site between two accents, both taken
-from the logo set:
+## Manual upload
 
-| Palette | Accent | Signal band | Notes |
-| --- | --- | --- | --- |
-| Signal (default) | orange `#e57224` | `images/background-candidate1.png` | black type on the band |
-| Blue | blue `#365fab` | `images/background2.png` | bone type on the band, for contrast |
+Upload the contents of this folder—not the containing folder—to the repository root. Keep the file and folder names unchanged. GitHub Pages can serve the `.html` links directly.
 
-Everything themeable routes through `--accent`, `--accent-ink`, `--accent-wash` and the glow
-tokens; the blue overrides live in one `[data-theme="blue"]` block. The choice is stored in
-`localStorage` under `b3n-theme` and re-applied by a two-line inline script in `<head>`, so
-there is no flash of the wrong palette on load or when moving between pages.
+After deploying:
 
----
+1. Confirm `https://b3nindustries.com/` loads over HTTPS.
+2. Test all nine public pages on desktop and mobile, including the FOCUS drawing interaction and BENCH calculations.
+3. Confirm `https://b3nindustries.com/sitemap.xml` and `/robots.txt` load.
+4. Submit the sitemap in Google Search Console.
+5. When Kyle's personal site has a confirmed production URL, add deliberate reciprocal links between its founder profile and `about.html`; do not invent or redirect a placeholder domain.
 
-## 2. Tech Stack
-Built entirely using standard web technologies:
-* **HTML5** — semantic markup for structure and SEO accessibility.
-* **CSS3** — custom layouts, typography, responsive styling and all motion.
+The founder page uses a visible business-card layout with Kyle Bennett's name, role, contact details and B3N logo in HTML. Its `ProfilePage` and `Person` data uses the same founder ID as the homepage `Organization` record. When the separate portfolio and verified LinkedIn/social profiles are live, add their exact URLs as visible links and matching `sameAs` values on the Person record. Give the personal portfolio its own distinct writing and canonical URL; keep this company profile focused on Kyle's role at B3N.
 
-* **JavaScript** — one small file, `script.js` (no dependencies, no build step), doing two
-  things: the palette switch in the nav, and letting you pick the prototype up off the drawing
-  plate with the mouse and drop it so it springs back. If the script never loads, the page
-  renders in the default palette and is otherwise unaffected.
-* No backend environment variables or databases required.
-* No user tracking, cookies, or live data processing implemented (privacy-first).
-* All other motion is CSS-only. Scroll reveals use `animation-timeline: view()` behind an
-  `@supports` guard, so browsers without scroll-driven animations simply render the content —
-  nothing is ever hidden behind a script.
-* `prefers-reduced-motion` is respected throughout.
+## Accessibility and behavior
 
----
+- Semantic headings, landmarks, skip links and visible keyboard focus are included.
+- Navigation remains visible without JavaScript; JavaScript enhances it into a mobile menu.
+- The industrial signal-orange palette is the default; visitors can switch to engineering blue, and their choice is stored locally in the browser.
+- Motion is reduced for visitors who request reduced motion.
 
-## 3. Project Structure
+Primary contact: `hello@b3nindustries.com`.
 
-```text
-├── images/
-│   ├── brand/                        # Logo set, vectorised from the Aug 2026 TCD PDFs
-│   │   ├── b3n-logo-silver.svg/.png  # Blue B + silver N + tagline
-│   │   ├── b3n-logo-orange.svg/.png  # Blue B + signal-orange N + tagline
-│   │   ├── b3n-logo-teal.svg/.png    # Blue B + teal N + tagline
-│   │   ├── b3n-logo-slate.svg/.png   # Blue B + slate N + tagline
-│   │   ├── b3n-logo-black.svg/.png   # Mono lockup, no tagline
-│   │   ├── b3n-logo-onink.svg        # Derived: light-on-dark lockup
-│   │   ├── b3n-mark-bone.svg         # Derived: bone monogram (nav, footer, favicon)
-│   │   └── b3n-type-specimen.svg/.png# Tagline typeface options
-│   ├── background-candidate1.png     # Orange wall texture (signal palette band)
-│   ├── background2.png               # Blue wall texture (blue palette band)
-│   └── grain.svg                     # Film-grain overlay tile
-├── contact.html          # Contact sheet — TCD-003
-├── index.html            # Main landing page — TCD-001
-├── README.md             # This documentation file
-├── robots.txt            # Search engine crawler guidance
-├── script.js             # Drag-and-release interaction for the drawing plate
-└── stylesheet.css        # Design system, layout and motion
-```
-
----
-
-## 4. Placeholders to replace
-Copy that stands in for information not yet supplied:
-* `hello@b3nindustries.com` — used in the footer and every contact link.
-* The stat-rail figures (layer height, mass, capacity) are prototype targets and should be
-  replaced with measured values before release.
+BENCH runs entirely on the visitor's device. Its "I have a number" interpreter accepts a measurement with its unit; the separate reference search finds familiar comparisons across length, time, power and water. `bench.js` is an unused legacy implementation and is not loaded by the supplied page. SPACES is offered as a bookable service through email; this repository does not contain the separate tour viewer/editor or a public sample tour, so the site does not present one as a live demo.
