@@ -14,6 +14,10 @@ Static, responsive company website for [b3nindustries.com](https://b3nindustries
 - `about.html` — company profile, search-focused service context and a collapsible Kyle Bennett founder card linked to `kylebrbennett.com`
 - `contact.html` — project inquiry information and direct email
 
+The homepage's “Request updates” link opens an email draft. It is not an automated mailing list or subscription database. Replace it with a verified mailing-list provider URL when one is configured, and publish the provider's consent/privacy details before collecting addresses.
+
+BENCH includes a direct link back to the main site. The public SPACES page remains a service/demo page, not an admin portal. This static repository cannot securely authenticate admins, restrict access to SPACES, or persist an editable member roster. Those features require a specified server/IP and deployment setup, HTTPS, server-side authentication, authorization, and private data storage. Never put credentials or member details into the public HTML/JavaScript files.
+
 ## Search foundations
 
 Every public page has a unique title, description, canonical URL and social-sharing metadata. The homepage establishes the B3N Industries organization and founder relationship in JSON-LD; relevant interior pages describe their page, person, service, product or app entity. `sitemap.xml` lists the nine public URLs and `robots.txt` advertises the sitemap.

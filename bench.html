@@ -110,6 +110,8 @@ ul { list-style: none; padding: 0; }
 }
 .logo span { color: var(--accent); }
 .masthead-right { display: flex; align-items: center; gap: 14px; }
+.home-link { color: var(--accent-bright); font: 600 12px var(--font-mono); text-decoration: underline; text-underline-offset: 4px; }
+.home-link:focus-visible { outline: 2px solid var(--accent-bright); outline-offset: 4px; }
 .org { font-family: var(--font-mono); font-size: 11px; color: var(--muted); letter-spacing: 0.06em; }
 
 .lede {
@@ -357,6 +359,8 @@ select.unit {
 
 @media (max-width: 640px) {
   body { padding: 24px 14px 72px; }
+  .masthead { align-items: flex-start; gap: 12px; }
+  .masthead-right { flex-wrap: wrap; justify-content: flex-end; gap: 8px; }
   .field-row { flex-direction: column; }
   select.unit { max-width: none; }
   .bar-row {
@@ -379,6 +383,7 @@ select.unit {
   <header class="masthead">
     <h1 class="logo">B3N <span>BENCH</span></h1>
     <div class="masthead-right">
+      <a class="home-link" href="index.html">← Back to B3N</a>
       <span class="org">B3N Industries</span>
       <button class="ghost-btn" id="themeToggle" type="button">Light mode</button>
     </div>
