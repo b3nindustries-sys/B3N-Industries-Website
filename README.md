@@ -34,9 +34,9 @@ After deploying:
 2. Test all nine public pages on desktop and mobile, including the FOCUS drawing interaction and BENCH calculations.
 3. Confirm `https://b3nindustries.com/sitemap.xml` and `/robots.txt` load.
 4. Submit the sitemap in Google Search Console.
-5. When Kyle's personal site has a confirmed production URL, add deliberate reciprocal links between its founder profile and `about.html`; do not invent or redirect a placeholder domain.
+5. Confirm the existing founder-card link and Person `url`/`sameAs` values use `https://kylebrbennett.com`, and check that the personal site's founder profile links back to B3N.
 
-The founder page uses a visible business-card layout with Kyle Bennett's name, role, contact details and B3N logo in HTML. Its `ProfilePage` and `Person` data uses the same founder ID as the homepage `Organization` record. When the separate portfolio and verified LinkedIn/social profiles are live, add their exact URLs as visible links and matching `sameAs` values on the Person record. Give the personal portfolio its own distinct writing and canonical URL; keep this company profile focused on Kyle's role at B3N.
+The founder page uses a visible business-card layout with Kyle Bennett's name, role, contact details and B3N logo in HTML. Its `ProfilePage` and `Person` data uses the same founder ID as the homepage `Organization` record. Kyle's personal portfolio at `https://kylebrbennett.com` is already linked from the founder card and identified in the homepage and founder-page Person records. When LinkedIn/social profile URLs are verified, add their exact URLs as visible links and matching `sameAs` values on the Person record. Give the personal portfolio its own distinct writing and canonical URL; keep this company profile focused on Kyle's role at B3N.
 
 ## Accessibility and behavior
 
